@@ -1,12 +1,3 @@
-## 종류
-
-<!-- ISSUE 종류를 선택하세요. -->
-
-- [ ] New Feature
-- [ ] Bug Fix
-- [ ] CI / CD
-- [ ] Setup
-
 ## 이슈명
 
 <!--
