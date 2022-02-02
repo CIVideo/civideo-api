@@ -28,7 +28,7 @@ jobs:
           cat << EOF >> ${{ env.APPLICATION_SECRET_FILE }}
           ${{ secrets.APPLICATION_SECRET }}
           EOF
-          ./gradlew build --no-daemon
+          ./gradlew build -Pprofile=dev --no-daemon
           docker build -t ${{ env.FULL_IMAGE_NAME }} .
           docker login \
             --username ${{ secrets.DOCKER_USER }} \
