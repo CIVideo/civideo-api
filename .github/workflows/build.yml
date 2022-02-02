@@ -32,4 +32,4 @@ jobs:
           cat << EOF >> ${{ env.APPLICATION_SECRET_FILE }}
           ${{ secrets.APPLICATION_SECRET }}
           EOF
-          ./gradlew build -Pprofile=dev --no-daemon
+          SPRING_PROFILES_ACTIVE=dev ./gradlew build --warning-mode=all --stacktrace --no-daemon
