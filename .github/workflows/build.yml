@@ -25,4 +25,6 @@ jobs:
         run: chmod +x gradlew
         
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+        run: |
+          echo ${{ secrets.SECRET_PROPERTIES }} >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          ./gradlew build --no-daemon
