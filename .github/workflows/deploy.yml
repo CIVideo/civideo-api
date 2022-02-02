@@ -24,7 +24,9 @@ jobs:
 
       - name: Build image and push to docker hub
         run: |
-          echo ${{ secrets.APPLICATION_SECRET }} >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          cat << EOF >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          ${{ secrets.APPLICATION_SECRET }}
+          EOF
           ./gradlew build --no-daemon
           docker build -t ${{ env.FULL_IMAGE_NAME }} .
           docker login \
