@@ -6,6 +6,7 @@ on:
 
 env:
   FULL_IMAGE_NAME: ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}
+  APPLICATION_SECRET_FILE: src/main/resources/application-secret.yml
 
 jobs:
   deploy:
@@ -24,7 +25,7 @@ jobs:
 
       - name: Build image and push to docker hub
         run: |
-          cat << EOF >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          cat << EOF >> ${{ env.APPLICATION_SECRET_FILE }}
           ${{ secrets.APPLICATION_SECRET }}
           EOF
           ./gradlew build --no-daemon
