@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
-    <property name="LOG_PATH" value="/var/log/civideo"/>
+    <property name="LOG_PATH" value="/tmp/log/civideo"/>
     <property name="LOG_FILE_NAME" value="civideo_log"/>
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
     <property name="LOG_PATTERN"
