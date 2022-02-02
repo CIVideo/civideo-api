@@ -26,5 +26,5 @@ jobs:
         
       - name: Build with Gradle
         run: |
-          echo ${{ secrets.SECRET_PROPERTIES }} >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          echo ${{ secrets.APPLICATION_SECRET }} >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
           ./gradlew build --no-daemon
