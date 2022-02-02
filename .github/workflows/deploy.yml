@@ -1,0 +1,51 @@
+name: Deploy CIVideo Application
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  FULL_IMAGE_NAME: ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build image and push to docker hub
+        run: |
+          echo ${{ secrets.SECRET_PROPERTIES }} >> src/main/java/com/ehago/kreamzone/resource/application-secret.yml
+          ./gradlew build --no-daemon
+          docker build -t ${{ env.FULL_IMAGE_NAME }} .
+          docker login \
+            --username ${{ secrets.DOCKER_USER }} \
+            --password ${{ secrets.DOCKER_USER_PASSWORD }}
+          docker push ${{ env.FULL_IMAGE_NAME }}
+
+      - name: Connect to server and restart container
+        uses: fifsky/ssh-action@v0.0.5
+        if: ${{ success() }}
+        with:
+          command: |
+            docker pull ${{ env.FULL_IMAGE_NAME }}
+            docker stop ${{ secrets.IMAGE_NAME }}
+            docker rm ${{ secrets.IMAGE_NAME }}
+            docker run \
+              -d --name ${{ secrets.IMAGE_NAME }} \
+              -p 80:8080 \
+              -v /var/log/${{ secrets.IMAGE_NAME }}:/tmp/log/${{ secrets.IMAGE_NAME }} \
+              ${{ env.FULL_IMAGE_NAME }}
+          host: ${{ secrets.SERVER_IP }}
+          user: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
