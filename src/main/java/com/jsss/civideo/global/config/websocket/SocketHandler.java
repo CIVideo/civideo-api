@@ -1,4 +1,4 @@
-package com.jsss.civideo.config;
+package com.jsss.civideo.global.config.websocket;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -16,7 +16,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
-            throws IOException {
+            throws InterruptedException, IOException {
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
                 webSocketSession.sendMessage(message);
@@ -25,8 +25,10 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
-        sessions.add(session);
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        if (sessions.size() < 2) {
+            sessions.add(session);
+        }
     }
 
 }

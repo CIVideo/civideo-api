@@ -1,4 +1,4 @@
-package com.jsss.civideo.entity;
+package com.jsss.civideo.global.config.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
