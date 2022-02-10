@@ -2,6 +2,7 @@ package com.jsss.civideo.global.config.auth;
 
 import com.jsss.civideo.domain.auth.CustomOAuth2UserService;
 import com.jsss.civideo.domain.auth.OAuth2AuthenticationSuccessHandler;
+import com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,6 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .authenticated()
                     .and()
                 .oauth2Login()
+                    .authorizationEndpoint()
+                        .authorizationRequestRepository(oAuth2AuthorizationRequestRepository)
+                        .and()
                     .redirectionEndpoint()
                         .baseUri("/oauth2/callback/*")
                         .and()
