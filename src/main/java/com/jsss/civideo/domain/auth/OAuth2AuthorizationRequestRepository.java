@@ -1,34 +1,49 @@
 package com.jsss.civideo.domain.auth;
 
+import com.jsss.civideo.global.util.CookieUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
+@Slf4j
 @Component
 public class OAuth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
+    public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
+    public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    public static final String MAIN_URL = "http://localhost:3001";
+
+    private static final int COOKIE_EXPIRE_SECONDS = 180;
+
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-        System.out.println(request);
-        return null;
+        // TODO: error handling
+        Cookie cookie = CookieUtil.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME).orElseThrow();
+        return CookieUtil.deserialize(cookie, OAuth2AuthorizationRequest.class);
     }
 
     @Override
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(authorizationRequest);
+        if (authorizationRequest == null) {
+            CookieUtil.removeCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+            CookieUtil.removeCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+            return;
+        }
+
+        CookieUtil.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtil.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
+        String redirectUriAfterLogin = Optional.ofNullable(request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME)).orElse(MAIN_URL);
+        CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
     }
 
     @Override
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
-        return null;
-    }
-
-    @Override
-    public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request, HttpServletResponse response) {
-        return AuthorizationRequestRepository.super.removeAuthorizationRequest(request, response);
+        return this.loadAuthorizationRequest(request);
     }
 
 }

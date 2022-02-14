@@ -1,27 +1,31 @@
 package com.jsss.civideo.domain.auth;
 
+import com.jsss.civideo.global.util.CookieUtil;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+import static com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.MAIN_URL;
+import static com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        System.out.println(authentication);
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
-    }
+@Component
+public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        System.out.println(authentication);
+        String redirectUriAfterLogin = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+                .map(Cookie::getValue)
+                .orElse(MAIN_URL);
+        OAuth2User principal = (OAuth2User) authentication.getPrincipal();
+        // TODO: access token 추가 작업
+        getRedirectStrategy().sendRedirect(request, response, redirectUriAfterLogin);
     }
 
 }
