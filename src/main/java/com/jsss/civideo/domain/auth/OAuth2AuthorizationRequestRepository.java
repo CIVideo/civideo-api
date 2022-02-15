@@ -17,7 +17,8 @@ public class OAuth2AuthorizationRequestRepository implements AuthorizationReques
 
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
-    public static final String MAIN_URL = "http://localhost:3001";
+    // TODO: change main URL to domain
+    public static final String MAIN_URL = "http://localhost:3000";
 
     private static final int COOKIE_EXPIRE_SECONDS = 180;
 
