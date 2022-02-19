@@ -1,4 +1,4 @@
-package com.jsss.civideo.global.config.websocket;
+package com.jjss.civideo.global.config.websocket;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;

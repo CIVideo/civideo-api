@@ -1,6 +1,6 @@
-package com.jsss.civideo.domain.auth;
+package com.jjss.civideo.domain.auth;
 
-import com.jsss.civideo.global.util.CookieUtil;
+import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.MAIN_URL;
-import static com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.jjss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.MAIN_URL;
+import static com.jjss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
