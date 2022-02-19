@@ -1,4 +1,4 @@
-package com.jsss.civideo;
+package com.jjss.civideo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

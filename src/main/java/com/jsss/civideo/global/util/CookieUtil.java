@@ -1,4 +1,4 @@
-package com.jsss.civideo.global.util;
+package com.jjss.civideo.global.util;
 
 import org.springframework.util.SerializationUtils;
 

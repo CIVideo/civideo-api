@@ -1,6 +1,6 @@
-package com.jsss.civideo.domain.auth;
+package com.jjss.civideo.domain.auth;
 
-import com.jsss.civideo.global.util.CookieUtil;
+import com.jjss.civideo.global.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
