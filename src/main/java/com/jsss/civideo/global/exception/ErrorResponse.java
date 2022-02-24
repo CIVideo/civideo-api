@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class ErrorResponse {
+public class ErrorResponse extends  {
     private String message;
     private int status;
     private List<FieldError> errors;
@@ -46,11 +46,12 @@ public class ErrorResponse {
         return new ErrorResponse(code, errors);
     }
 
-//    public static ErrorResponse of(MethodArgumentTypeMismatchException e) {
-//        final String value = e.getValue() == null ? "" : e.getValue().toString();
-//        final List<ErrorResponse.FieldError> errors = ErrorResponse.FieldError.of(e.getName(), value, e.getErrorCode());
-//        return new ErrorResponse(ErrorCode.INVALID_TYPE_VALUE, errors);
-//    }
+    public static ErrorResponse of(MethodArgumentTypeMismatchException e) {
+        final String value = e.getValue() == null ? "" : e.getValue().toString();
+        final List<ErrorResponse.FieldError> errors = ErrorResponse.FieldError.of(e.getName(), value, e.getErrorCode());
+        return new ErrorResponse(ErrorCode.INVALID_TYPE_VALUE, errors);
+    }
+
 
 
     @Getter
