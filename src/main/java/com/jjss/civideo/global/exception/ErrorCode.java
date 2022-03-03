@@ -1,4 +1,4 @@
-package com.jsss.civideo.global.exception;
+package com.jjss.civideo.global.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

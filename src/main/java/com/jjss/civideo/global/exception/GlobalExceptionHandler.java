@@ -1,4 +1,4 @@
-package com.jsss.civideo.global.exception;
+package com.jjss.civideo.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
