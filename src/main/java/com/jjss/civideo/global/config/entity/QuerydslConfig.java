@@ -1,4 +1,4 @@
-package com.jsss.civideo.global.config.entity;
+package com.jjss.civideo.global.config.entity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

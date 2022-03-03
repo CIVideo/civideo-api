@@ -1,4 +1,4 @@
-package com.jsss.civideo.domain.auth;
+package com.jjss.civideo.domain.auth;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

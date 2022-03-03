@@ -1,9 +1,9 @@
-package com.jsss.civideo.global.config.auth;
+package com.jjss.civideo.global.config.auth;
 
-import com.jsss.civideo.domain.auth.CustomOAuth2UserService;
-import com.jsss.civideo.domain.auth.OAuth2AuthenticationFailureHandler;
-import com.jsss.civideo.domain.auth.OAuth2AuthenticationSuccessHandler;
-import com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository;
+import com.jjss.civideo.domain.auth.CustomOAuth2UserService;
+import com.jjss.civideo.domain.auth.OAuth2AuthenticationFailureHandler;
+import com.jjss.civideo.domain.auth.OAuth2AuthenticationSuccessHandler;
+import com.jjss.civideo.domain.auth.OAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

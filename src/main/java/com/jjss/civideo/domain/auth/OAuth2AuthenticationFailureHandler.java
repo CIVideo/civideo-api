@@ -1,6 +1,6 @@
-package com.jsss.civideo.domain.auth;
+package com.jjss.civideo.domain.auth;
 
-import com.jsss.civideo.global.util.CookieUtil;
+import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.jsss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.*;
+import static com.jjss.civideo.domain.auth.OAuth2AuthorizationRequestRepository.*;
 
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
