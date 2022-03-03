@@ -1,4 +1,4 @@
-package com.jsss.civideo.controller;
+package com.jjss.civideo.controller;
 
 
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ExceptionTestController {
 
     @RequestMapping(value = "/exceptionTest", method = RequestMethod.GET)
-    public void test() {
+    public void exceptionTest() {
         throw new RuntimeException("test");
+    }
+
+
+    @RequestMapping(value = "/exceptionTest2", method = RequestMethod.GET)
+    public void test() {
+        throw new ("test");
     }
 
 }
