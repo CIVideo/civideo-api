@@ -1,8 +1,7 @@
-package com.jsss.civideo.global.exception;
+package com.jjss.civideo.global.exception;
 
 import lombok.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.ArrayList;
