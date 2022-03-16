@@ -1,12 +1,22 @@
-package com.jjss.civideo.domain.auth;
+package com.jjss.civideo.domain.auth.entity;
 
 import com.jjss.civideo.domain.couple.Couple;
 import com.jjss.civideo.global.config.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.Random;
 
@@ -27,6 +37,8 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String nickname;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -43,6 +55,12 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
+
+    @Builder
+    private User(String email) {
+        this.email = email;
+        this.code = createCode();
+    }
 
     private String createCode() {
         int leftLimit = 48;
