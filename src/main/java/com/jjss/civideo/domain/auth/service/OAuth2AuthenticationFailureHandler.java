@@ -22,12 +22,15 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
         String redirectUriAfterLogin = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue)
                 .orElse(MAIN_URL);
+
         redirectUriAfterLogin = UriComponentsBuilder.fromUriString(redirectUriAfterLogin)
                 .queryParam("error", exception.getLocalizedMessage())
                 .build()
                 .toUriString();
+
         CookieUtil.removeCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
         CookieUtil.removeCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+
         getRedirectStrategy().sendRedirect(request, response, redirectUriAfterLogin);
     }
 

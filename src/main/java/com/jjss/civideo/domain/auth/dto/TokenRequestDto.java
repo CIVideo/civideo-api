@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -21,5 +22,10 @@ public class TokenRequestDto {
     @NotNull(message = "provider는 필수 값입니다.")
     @Pattern(regexp = "google|apple|kakao", message = "provider는 Google, Apple, Kakao 중 하나의 값이어야 합니다.")
     private String provider;
+
+    @ApiModelProperty(value = "email", dataType = "string", example = "vscode@kakao.com")
+    @NotNull(message = "email은 필수 값입니다.")
+    @Email(message = "이메일 형태를 만족해야 합니다.")
+    private String email;
 
 }
