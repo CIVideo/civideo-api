@@ -3,6 +3,7 @@ package com.jjss.civideo.domain.auth.controller;
 import com.jjss.civideo.domain.auth.dto.TokenRequestDto;
 import com.jjss.civideo.domain.auth.dto.TokenResponseDto;
 import com.jjss.civideo.domain.auth.service.UserService;
+import com.jjss.civideo.global.exception.BadRequestResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +35,7 @@ public class UserController {
     @GetMapping("/auth/token")
     public ResponseEntity<?> sendToken(@Valid TokenRequestDto tokenRequestDto, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors.getAllErrors());
+            return ResponseEntity.badRequest().body(BadRequestResponseDto.of(errors));
         }
         String accessToken = userService.createAccessToken(tokenRequestDto);
         if (accessToken == null) {
