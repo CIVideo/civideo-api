@@ -1,9 +1,8 @@
 package com.jjss.civideo.global.config.auth;
 
-import com.jjss.civideo.domain.auth.CustomOAuth2UserService;
-import com.jjss.civideo.domain.auth.OAuth2AuthenticationFailureHandler;
-import com.jjss.civideo.domain.auth.OAuth2AuthenticationSuccessHandler;
-import com.jjss.civideo.domain.auth.OAuth2AuthorizationRequestRepository;
+import com.jjss.civideo.domain.auth.service.OAuth2AuthenticationFailureHandler;
+import com.jjss.civideo.domain.auth.service.OAuth2AuthenticationSuccessHandler;
+import com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
@@ -43,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                     .disable()
                 .authorizeRequests()
-                    .antMatchers("/oauth2/**")
+                    .antMatchers("/oauth2/**", "/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
@@ -55,9 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                     .redirectionEndpoint()
                         .baseUri("/oauth2/callback/*")
-                        .and()
-                    .userInfoEndpoint()
-                        .userService(customOAuth2UserService)
                         .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .failureHandler(OAuth2AuthenticationFailureHandler)
