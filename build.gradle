@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'java'
 }
 
@@ -11,6 +12,14 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+    asciidoctorExt
 }
 
 dependencies {
@@ -30,14 +39,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+def querydslSrcDir = "$buildDir/generated/querydsl" as Object
+def snippetsDir = file('build/generated-snippets')
+
 test {
+    outputs.dir snippetsDir
     useJUnitPlatform()
 }
-
-def querydslSrcDir = "$buildDir/generated/querydsl" as Object
 
 querydsl {
     library = "com.querydsl:querydsl-apt"
@@ -49,17 +62,23 @@ sourceSets {
     main.java.srcDir querydslSrcDir
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
-}
-
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
 jar {
     enabled = false
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
 }
