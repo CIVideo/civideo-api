@@ -24,12 +24,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
                 .cors()
+                    .configurationSource(corsConfigurationSource)
                     .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
