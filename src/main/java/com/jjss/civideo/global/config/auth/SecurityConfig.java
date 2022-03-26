@@ -6,12 +6,11 @@ import com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,7 +23,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
+    private final OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
     private final CorsConfigurationSource corsConfigurationSource;
+
+    @Override
+    public void configure(WebSecurity web) {
+        web
+                .ignoring()
+                .mvcMatchers("/favicon.ico");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -60,8 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(OAuth2AuthenticationFailureHandler)
                     .and()
                 .exceptionHandling()
-                    // TODO: custom error handler
-                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                    .authenticationEntryPoint(oAuth2AuthenticationEntryPoint);
         // @formatter:on
     }
 
