@@ -3,10 +3,12 @@ package com.jjss.civideo.global.exception;
 import com.jjss.civideo.global.exception.dto.BadRequestResponseDto;
 import com.jjss.civideo.global.exception.dto.MethodNotAllowedResponseDto;
 import com.jjss.civideo.global.exception.dto.NotFoundResponseDto;
+import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,9 +32,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<MethodNotAllowedResponseDto> handle405(HttpRequestMethodNotSupportedException e) {
+    public ResponseEntity<MethodNotAllowedResponseDto> handle405(HttpRequestMethodNotSupportedException e) {
         log.error("HttpRequestMethodNotSupportedException", e);
         return new ResponseEntity<>(MethodNotAllowedResponseDto.of(e), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<UnsupportedMediaTypeResponseDto> handle415(HttpMediaTypeNotSupportedException e) {
+        log.error("HttpMediaTypeNotSupportedException", e);
+        return new ResponseEntity<>(UnsupportedMediaTypeResponseDto.of(e), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
 }
