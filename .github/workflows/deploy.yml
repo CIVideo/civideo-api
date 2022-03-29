@@ -57,13 +57,11 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
 
       - name: Send GitHub Action trigger data to Slack workflow
-        id: slack
-        if: always()
-        uses: slackapi/slack-github-action@v1.18.0
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Deploy Workflow
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          payload: |
-            {
-              "message": "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-            }
+        if: always()
