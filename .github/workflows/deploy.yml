@@ -2,7 +2,7 @@ name: Deploy CIVideo Application
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 env:
   FULL_IMAGE_NAME: ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}
@@ -58,6 +58,7 @@ jobs:
 
       - name: Send GitHub Action trigger data to Slack workflow
         id: slack
+        if: always()
         uses: slackapi/slack-github-action@v1.18.0
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
