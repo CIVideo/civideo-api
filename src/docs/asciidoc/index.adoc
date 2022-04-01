@@ -1,0 +1,76 @@
+ifndef::snippets[]
+:snippet: ../../../build/generated-snippets
+//:rootDir: ./
+endif::[]
+
+= CIVideo API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[overview]]
+= 개요
+
+[[overview-http-verbs]]
+== HTTP Method
+
+본 API Server에서 사용하는 HTTP 동사(verbs)는 가능한 한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 동사 | 용례
+
+| `GET`
+| resource를 가져올 때 사용
+
+| `POST`
+| 새 resource를 만들 때 사용
+
+| `PUT`
+| 기존 resource를 수정할 때 사용
+
+| `PATCH`
+| 기존 resource의 일부를 수정할 때 사용
+
+| `DELETE`
+| 기존 resource를 삭제할 떄 사용
+|===
+
+[[overview-http-status-codes]]
+== HTTP Status Code
+
+본 API Server에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 상태 코드 | 용례
+
+| `200 OK`
+| 요청을 성공적으로 처리함.
+
+| `201 Created`
+| 새 resource를 성공적으로 생성함.
+
+| `204 No Content`
+| 기존 resource를 성공적으로 수정함.
+
+| `400 Bad Request`
+| 잘못된 요청을 보낸 경우. 응답 본문에 오류에 대한 정보가 담겨 있다.
+
+| `401 Unauthorized`
+| 인증되지 않은 상태에서 인증 API를 호출한 경우.
+
+| `404 Not Found`
+| 요청한 resource가 없음.
+
+| `405 Method Not Allowed`
+| 요청한 method는 허용하지 않음.
+|===
+
+[[overview-auth]]
+== 인증 (Authentication)
+
+인증은 OAuth 2.0 표준 규약을 따릅니다.
