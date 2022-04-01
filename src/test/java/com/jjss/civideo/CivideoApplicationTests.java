@@ -8,8 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
-@ActiveProfiles("dev")
-// @SpringBootTest
+@ActiveProfiles("test")
 class CivideoApplicationTests {
 
 	@Test
