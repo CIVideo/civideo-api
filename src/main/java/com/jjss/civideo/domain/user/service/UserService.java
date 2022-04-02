@@ -1,6 +1,7 @@
 package com.jjss.civideo.domain.user.service;
 
 import com.jjss.civideo.domain.user.dto.TokenRequestDto;
+import com.jjss.civideo.domain.user.entity.Provider;
 import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
 import com.jjss.civideo.global.util.JwtProvider;

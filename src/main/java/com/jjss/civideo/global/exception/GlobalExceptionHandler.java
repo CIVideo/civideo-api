@@ -1,6 +1,6 @@
 package com.jjss.civideo.global.exception;
 
-import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
+import com.jjss.civideo.domain.user.exception.OAuth2AuthorizationRequestMissingException;
 import com.jjss.civideo.global.exception.dto.BadRequestResponseDto;
 import com.jjss.civideo.global.exception.dto.MethodNotAllowedResponseDto;
 import com.jjss.civideo.global.exception.dto.NotFoundResponseDto;
