@@ -1,8 +1,8 @@
-package com.jjss.civideo.domain.auth.controller;
+package com.jjss.civideo.domain.user.controller;
 
-import com.jjss.civideo.domain.auth.dto.TokenRequestDto;
-import com.jjss.civideo.domain.auth.dto.TokenResponseDto;
-import com.jjss.civideo.domain.auth.service.UserService;
+import com.jjss.civideo.domain.user.dto.TokenRequestDto;
+import com.jjss.civideo.domain.user.dto.TokenResponseDto;
+import com.jjss.civideo.domain.user.service.UserService;
 import com.jjss.civideo.global.exception.BadRequestResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

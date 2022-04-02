@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.entity;
+package com.jjss.civideo.domain.user.entity;
 
 import com.jjss.civideo.domain.couple.Couple;
 import com.jjss.civideo.global.config.entity.BaseEntity;
