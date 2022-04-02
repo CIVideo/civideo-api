@@ -1,6 +1,6 @@
-package com.jjss.civideo.domain.auth.repository;
+package com.jjss.civideo.domain.user.repository;
 
-import com.jjss.civideo.domain.auth.entity.User;
+import com.jjss.civideo.domain.user.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

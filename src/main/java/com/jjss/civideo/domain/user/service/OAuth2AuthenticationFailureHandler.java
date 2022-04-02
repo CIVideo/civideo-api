@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.service;
+package com.jjss.civideo.domain.user.service;
 
 import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.core.AuthenticationException;
