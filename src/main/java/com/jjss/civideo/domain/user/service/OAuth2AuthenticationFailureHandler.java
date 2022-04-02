@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.service;
+package com.jjss.civideo.domain.user.service;
 
 import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.core.AuthenticationException;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository.*;
+import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.*;
 
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {

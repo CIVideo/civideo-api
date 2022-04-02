@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.dto;
+package com.jjss.civideo.domain.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

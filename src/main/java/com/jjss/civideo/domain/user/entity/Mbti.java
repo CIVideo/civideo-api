@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.entity;
+package com.jjss.civideo.domain.user.entity;
 
 public enum Mbti {
     ESTP,

@@ -1,7 +1,7 @@
-package com.jjss.civideo.domain.auth.service;
+package com.jjss.civideo.domain.user.service;
 
-import com.jjss.civideo.domain.auth.entity.User;
-import com.jjss.civideo.domain.auth.repository.UserRepository;
+import com.jjss.civideo.domain.user.entity.User;
+import com.jjss.civideo.domain.user.repository.UserRepository;
 import com.jjss.civideo.global.util.CookieUtil;
 import com.jjss.civideo.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository.MAIN_URL;
-import static com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.MAIN_URL;
+import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_EXPIRATION_SECONDS;
 import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_NAME;
 

@@ -1,8 +1,8 @@
-package com.jjss.civideo.domain.auth.service;
+package com.jjss.civideo.domain.user.service;
 
-import com.jjss.civideo.domain.auth.dto.TokenRequestDto;
-import com.jjss.civideo.domain.auth.entity.User;
-import com.jjss.civideo.domain.auth.repository.UserRepository;
+import com.jjss.civideo.domain.user.dto.TokenRequestDto;
+import com.jjss.civideo.domain.user.entity.User;
+import com.jjss.civideo.domain.user.repository.UserRepository;
 import com.jjss.civideo.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;

@@ -1,8 +1,8 @@
 package com.jjss.civideo.global.config.auth;
 
-import com.jjss.civideo.domain.auth.service.OAuth2AuthenticationFailureHandler;
-import com.jjss.civideo.domain.auth.service.OAuth2AuthenticationSuccessHandler;
-import com.jjss.civideo.domain.auth.service.OAuth2AuthorizationRequestRepository;
+import com.jjss.civideo.domain.user.service.OAuth2AuthenticationFailureHandler;
+import com.jjss.civideo.domain.user.service.OAuth2AuthenticationSuccessHandler;
+import com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                     .disable()
                 .authorizeRequests()
-                    .antMatchers("/oauth2/**", "/auth/**")
+                    .antMatchers("/oauth2/**", "/auth/**", "/docs/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
