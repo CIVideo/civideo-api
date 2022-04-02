@@ -1,6 +1,6 @@
 package com.jjss.civideo.domain.user.service;
 
-import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
+import com.jjss.civideo.domain.user.exception.OAuth2AuthorizationRequestMissingException;
 import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;

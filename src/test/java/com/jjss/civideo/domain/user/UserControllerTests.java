@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTests extends BaseControllerTest {
 
 //    @Test
+//    @WithMockUser
 //    public void sendToken_SendRightValue_200() throws Exception {
 //        TokenRequestDto tokenRequestDto = new TokenRequestDto();
 //        tokenRequestDto.setProvider("kakao");
@@ -84,8 +85,7 @@ public class UserControllerTests extends BaseControllerTest {
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
                                 ),
                                 responseFields(
-                                        fieldWithPath("errors").type(JsonFieldType.OBJECT).description("errors object"),
-                                        fieldWithPath("errors[]").type(JsonFieldType.ARRAY).description("An array of field errors"),
+                                        fieldWithPath("errors").type(JsonFieldType.ARRAY).description("An array of field errors"),
                                         fieldWithPath("errors[].field").type(JsonFieldType.STRING).description("error field"),
                                         fieldWithPath("errors[].message").type(JsonFieldType.STRING).description("error description")
                                 )

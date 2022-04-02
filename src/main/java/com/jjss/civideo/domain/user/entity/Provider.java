@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.entity;
+package com.jjss.civideo.domain.user.entity;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;

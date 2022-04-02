@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.auth.exception;
+package com.jjss.civideo.domain.user.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

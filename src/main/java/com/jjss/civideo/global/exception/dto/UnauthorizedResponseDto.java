@@ -1,6 +1,6 @@
 package com.jjss.civideo.global.exception.dto;
 
-import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
+import com.jjss.civideo.domain.user.exception.OAuth2AuthorizationRequestMissingException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
