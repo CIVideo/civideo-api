@@ -1,8 +1,10 @@
 package com.jjss.civideo.global.exception;
 
+import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
 import com.jjss.civideo.global.exception.dto.BadRequestResponseDto;
 import com.jjss.civideo.global.exception.dto.MethodNotAllowedResponseDto;
 import com.jjss.civideo.global.exception.dto.NotFoundResponseDto;
+import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BadRequestResponseDto> handle400(BindException e) {
         log.error("BindException", e);
         return new ResponseEntity<>(BadRequestResponseDto.of(e), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OAuth2AuthorizationRequestMissingException.class)
+    public ResponseEntity<UnauthorizedResponseDto> handle401(OAuth2AuthorizationRequestMissingException e) {
+        log.error("OAuth2AuthorizationRequestMissingException", e);
+        return new ResponseEntity<>(UnauthorizedResponseDto.of(e), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

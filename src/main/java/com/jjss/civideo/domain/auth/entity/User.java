@@ -53,11 +53,12 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "CHAR(10)", nullable = false, updatable = false, unique = true)
     private String code;
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false, updatable = false)
-    private String provider;
+    @Column(nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @Builder
-    private User(String email, String provider) {
+    private User(String email, Provider provider) {
         this.email = email;
         this.provider = provider;
         this.code = createCode();
