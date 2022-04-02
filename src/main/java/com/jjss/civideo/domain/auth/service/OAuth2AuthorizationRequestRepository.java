@@ -1,5 +1,6 @@
 package com.jjss.civideo.domain.auth.service;
 
+import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
 import com.jjss.civideo.global.util.CookieUtil;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -22,8 +23,8 @@ public class OAuth2AuthorizationRequestRepository implements AuthorizationReques
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-        // TODO: error handling
-        Cookie cookie = CookieUtil.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME).orElseThrow();
+        Cookie cookie = CookieUtil.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
+                .orElseThrow(() -> new OAuth2AuthorizationRequestMissingException(request.getRequestURI()));
         return CookieUtil.deserialize(cookie, OAuth2AuthorizationRequest.class);
     }
 
