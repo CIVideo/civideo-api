@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -26,39 +27,43 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
-@MockBean(UserService.class)
 public class UserControllerTests extends BaseControllerTest {
 
-//    @Test
-//    @WithMockUser
-//    public void sendToken_SendRightValue_200() throws Exception {
-//        TokenRequestDto tokenRequestDto = new TokenRequestDto();
-//        tokenRequestDto.setProvider("kakao");
-//        tokenRequestDto.setToken("");
-//
-//        mockMvc.perform(get("/auth/token")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString("")))
-//                .andExpect(status().isBadRequest())
-//                .andDo(document("create-token-200",
-//                                requestHeaders(
-//                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header"),
-//                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
-//                                ),
-//                                requestFields(
-//                                        fieldWithPath("provider").type(JsonFieldType.STRING).description("OAuth2 provider"),
-//                                        fieldWithPath("token").type(JsonFieldType.STRING).description("provider가 발급해준 access token")
-//                                ),
-//                                responseHeaders(
-//                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
-//                                ),
-//                                responseFields(
-//                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token")
-//                                )
-//                        )
-//                );
-//    }
+    @MockBean
+    UserService userService;
+
+    @Test
+    @WithMockUser
+    public void sendToken_SendRightValue_200() throws Exception {
+        TokenRequestDto tokenRequestDto = new TokenRequestDto();
+        tokenRequestDto.setProvider("kakao");
+        tokenRequestDto.setToken("");
+
+        when(userService.createAccessToken(tokenRequestDto)).thenReturn("??");
+
+        mockMvc.perform(get("/auth/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString("")))
+                .andExpect(status().isBadRequest())
+                .andDo(document("create-token",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                                ),
+                                requestFields(
+                                        fieldWithPath("provider").type(JsonFieldType.STRING).description("OAuth2 provider"),
+                                        fieldWithPath("token").type(JsonFieldType.STRING).description("provider가 발급해준 access token")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                                ),
+                                responseFields(
+                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token")
+                                )
+                        )
+                );
+    }
 
     @Test
     @WithMockUser

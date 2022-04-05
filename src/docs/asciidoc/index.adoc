@@ -1,6 +1,6 @@
 ifndef::snippets[]
 :snippet: ../../../build/generated-snippets
-//:rootDir: ./
+// :rootDir: ./
 endif::[]
 
 = CIVideo API Guide
@@ -12,6 +12,8 @@ endif::[]
 :sectlinks:
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
+:site-url: /build/asciidoc/html5/
+:root: {rootDir}/src/docs/asciidoc
 
 [[overview]]
 = 개요
@@ -74,3 +76,11 @@ endif::[]
 == 인증 (Authentication)
 
 인증은 OAuth 2.0 표준 규약을 따릅니다.
+
+[[apis]]
+== API
+
+[[auth]]
+=== Authentication
+==== `token 받기`
+include::{root}/auth/get-token.adoc[]

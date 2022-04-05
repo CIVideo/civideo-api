@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserService {
         Provider provider = Provider.valueOf(tokenRequestDto.getProvider().toUpperCase());
 
         try {
-            HashMap<?, ?> body = new RestTemplate()
+            Map<?, ?> body = new RestTemplate()
                     .exchange(provider.getTokenInfoUrl(token), HttpMethod.GET, new HttpEntity<>(provider.getHeader(token)), HashMap.class)
                     .getBody();
 
@@ -34,7 +35,7 @@ public class UserService {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
             }
 
-            String email = (String) body.get("email");
+            String email = provider.getEmail((Map<String, Object>) body);
             User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
                     .email(email)
                     .provider(provider)

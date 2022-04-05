@@ -1,0 +1,40 @@
+ifndef::snippets[]
+:sub-snippet: ../../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:site-url: /build/asciidoc/html5/auth
+
+= access token 조회
+
+[[request]]
+== Request
+include::{sub-snippet}/create-token-400/curl-request.adoc[]
+include::{sub-snippet}/create-token-400/http-request.adoc[]
+
+=== Request Headers
+include::{sub-snippet}/create-token-400/request-headers.adoc[]
+
+=== Request Fields
+include::{sub-snippet}/create-token-400/request-fields.adoc[]
+
+=== Request Body
+include::{sub-snippet}/create-token-400/request-body.adoc[]
+
+
+[[response]]
+== Response
+include::{sub-snippet}/create-token-400/http-response.adoc[]
+
+=== Response Headers
+include::{sub-snippet}/create-token-400/response-headers.adoc[]
+
+=== Response Fields
+include::{sub-snippet}/create-token-400/response-fields.adoc[]
+
+=== Response Body
+include::{sub-snippet}/create-token-400/response-body.adoc[]
