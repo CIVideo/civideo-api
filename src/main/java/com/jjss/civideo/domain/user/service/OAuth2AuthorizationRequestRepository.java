@@ -19,7 +19,7 @@ public class OAuth2AuthorizationRequestRepository implements AuthorizationReques
     // TODO: change main URL to domain
     public static final String MAIN_URL = "http://localhost:3000";
 
-    private static final int COOKIE_EXPIRE_SECONDS = 180;
+    private static final int COOKIE_EXPIRE_SECONDS = 60;
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
@@ -41,6 +41,7 @@ public class OAuth2AuthorizationRequestRepository implements AuthorizationReques
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
         return this.loadAuthorizationRequest(request);
     }

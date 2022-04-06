@@ -1,12 +1,12 @@
-package com.jjss.civideo;
+package com.jjss.civideo.domain.user;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Random;
 
-@ActiveProfiles("test")
-class CivideoApplicationTests {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class UserDomainTests {
 
     @Test
     public void givenUsingJava8_whenGeneratingRandomAlphanumericString_thenCorrect() {
@@ -21,7 +21,7 @@ class CivideoApplicationTests {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
 
-        System.out.println(generatedString);
+        assertEquals(generatedString.length(), 10);
     }
 
 }

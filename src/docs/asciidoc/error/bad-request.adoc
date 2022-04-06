@@ -1,0 +1,39 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+= 400 Bad Request
+
+[[request]]
+== Request
+
+include::{snippets}/error/bad-request/curl-request.adoc[]
+include::{snippets}/error/bad-request/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/error/bad-request/request-headers.adoc[]
+
+=== Request Parameters
+
+include::{snippets}/error/bad-request/request-parameters.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/error/bad-request/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/error/bad-request/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/error/bad-request/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/error/bad-request/response-body.adoc[]
