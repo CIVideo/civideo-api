@@ -1,0 +1,39 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+= access token 조회
+
+[[request]]
+== Request
+
+include::{snippets}/authentication/create-token/curl-request.adoc[]
+include::{snippets}/authentication/create-token/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/authentication/create-token/request-headers.adoc[]
+
+=== Request Parameters
+
+include::{snippets}/authentication/create-token/request-parameters.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/authentication/create-token/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/authentication/create-token/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/authentication/create-token/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/authentication/create-token/response-body.adoc[]
