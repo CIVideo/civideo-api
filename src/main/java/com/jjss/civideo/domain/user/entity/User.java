@@ -34,8 +34,8 @@ public class User extends BaseEntity {
     @JoinColumn(name = "couple_id")
     private Couple couple;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false, unique = true, updatable = false)
+    private String providerId;
 
     private String nickname;
 
@@ -58,8 +58,8 @@ public class User extends BaseEntity {
     private Provider provider;
 
     @Builder
-    private User(String email, Provider provider) {
-        this.email = email;
+    private User(String providerId, Provider provider) {
+        this.providerId = providerId;
         this.provider = provider;
         this.code = createCode();
     }

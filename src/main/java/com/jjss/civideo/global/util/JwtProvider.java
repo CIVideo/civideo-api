@@ -41,18 +41,18 @@ public final class JwtProvider {
         );
     }
 
-    public static String createAccessToken(Long userId, String email) {
-        return createToken(userId, email, ACCESS_TOKEN_EXPIRATION_SECONDS);
+    public static String createAccessToken(Long userId, String providerId) {
+        return createToken(userId, providerId, ACCESS_TOKEN_EXPIRATION_SECONDS);
     }
 
     public static String createRefreshToken(Long userId, String email) {
         return createToken(userId, email, REFRESH_TOKEN_EXPIRATION_SECONDS);
     }
 
-    private static String createToken(Long userId, String email, int expirationTime) {
+    private static String createToken(Long userId, String providerId, int expirationTime) {
         return Jwts.builder()
                 .setHeader(createHeaders())
-                .setClaims(createPayloads(userId, email, expirationTime))
+                .setClaims(createPayloads(userId, providerId, expirationTime))
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -65,12 +65,12 @@ public final class JwtProvider {
         return headers;
     }
 
-    private static Map<String, Object> createPayloads(Long userId, String email, int expirationTime) {
+    private static Map<String, Object> createPayloads(Long userId, String providerId, int expirationTime) {
         LocalDateTime now = LocalDateTime.now();
         long time = Timestamp.valueOf(now).getTime();
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("iss", "https://api.civideo.com");
-        payloads.put("sub", email);
+        payloads.put("sub", providerId);
         payloads.put("aud", "https://civideo.com");
         payloads.put("iat", time);
         payloads.put("exp", time + expirationTime);
@@ -89,9 +89,9 @@ public final class JwtProvider {
     public static Authentication authenticate(String jwtToken) throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
         Jws<Claims> claims = getClaims(jwtToken);
         Claims body = claims.getBody();
-        String email = (String) body.get("email");
+        String id = (String) body.get("sub");
 
-        return new UsernamePasswordAuthenticationToken(email, null);
+        return new UsernamePasswordAuthenticationToken(id, null);
     }
 
 }
