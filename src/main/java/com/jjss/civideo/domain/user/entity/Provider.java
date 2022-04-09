@@ -22,7 +22,7 @@ public enum Provider {
 
         @Override
         public String getProviderId(Map<String, Object> body) {
-            return (String) body.get("sub");
+            return body.get("sub").toString();
         }
     },
     KAKAO {
@@ -41,7 +41,7 @@ public enum Provider {
 
         @Override
         public String getProviderId(Map<String, Object> body) {
-            return (String) body.get("id");
+            return body.get("id").toString();
         }
     };
 
