@@ -38,9 +38,9 @@ public class UserService {
                     .filter((entry) -> entry.getKey() instanceof String)
                     .collect(Collectors.toMap(entry -> (String) entry.getKey(), Map.Entry::getValue));
 
-            String email = oAuth2Provider.getEmail(checkedBody);
-            User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
-                    .email(email)
+            String id = oAuth2Provider.getProviderId(checkedBody);
+            User user = userRepository.findByProviderId(id).orElseGet(() -> User.builder()
+                    .providerId(id)
                     .provider(oAuth2Provider)
                     .build());
 
@@ -48,7 +48,7 @@ public class UserService {
                 userRepository.save(user);
             }
 
-            return JwtProvider.createAccessToken(user.getId(), user.getEmail());
+            return JwtProvider.createAccessToken(user.getId(), user.getProviderId());
         } catch (HttpClientErrorException e) {
             return null;
         }
