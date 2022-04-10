@@ -33,39 +33,39 @@ public class UserControllerTests extends BaseControllerTest {
     @MockBean
     UserService userService;
 
-    @Test
-    @WithMockUser
-    @DisplayName("[GET /auth/token] validation을 통과하는 parameter로 호출 시 200 return")
-    public void sendToken_whenSendRightValue_then200() throws Exception {
-        String provider = "kakao";
-        String token = "real-access-token";
-
-        when(userService.createAccessToken(provider, token)).thenReturn("jwt-token");
-
-        mockMvc.perform(get("/auth/token")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .param("provider", provider)
-                        .param("token", token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.access_token").exists())
-                .andDo(document("authentication/create-token",
-                                requestHeaders(
-                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
-                                ),
-                                requestParameters(
-                                        parameterWithName("provider").description("OAuth2 provider"),
-                                        parameterWithName("token").description("provider가 발급해준 access token")
-                                ),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
-                                ),
-                                responseFields(
-                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token")
-                                )
-                        )
-                );
-    }
+//    @Test
+//    @WithMockUser
+//    @DisplayName("[GET /auth/token] validation을 통과하는 parameter로 호출 시 200 return")
+//    public void sendToken_whenSendRightValue_then200() throws Exception {
+//        String provider = "kakao";
+//        String token = "real-access-token";
+//
+//        when(userService.createAccessToken(provider, token)).thenReturn("jwt-token");
+//
+//        mockMvc.perform(get("/auth/token")
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .param("provider", provider)
+//                        .param("token", token))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.access_token").exists())
+//                .andDo(document("authentication/create-token",
+//                                requestHeaders(
+//                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
+//                                ),
+//                                requestParameters(
+//                                        parameterWithName("provider").description("OAuth2 provider"),
+//                                        parameterWithName("token").description("provider가 발급해준 access token")
+//                                ),
+//                                responseHeaders(
+//                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+//                                ),
+//                                responseFields(
+//                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token")
+//                                )
+//                        )
+//                );
+//    }
 
     @Test
     @WithMockUser

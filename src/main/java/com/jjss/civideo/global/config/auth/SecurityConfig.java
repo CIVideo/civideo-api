@@ -4,7 +4,6 @@ import com.jjss.civideo.domain.user.service.OAuth2AuthenticationFailureHandler;
 import com.jjss.civideo.domain.user.service.OAuth2AuthenticationSuccessHandler;
 import com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -24,7 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
     private final OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
-    private final CorsConfigurationSource corsConfigurationSource;
 
     @Override
     public void configure(WebSecurity web) {
@@ -38,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
                 .cors()
-                    .configurationSource(corsConfigurationSource)
+                    .configurationSource(this.corsConfigurationSource())
                     .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -48,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .disable()
                 .httpBasic()
+                    .disable()
+                .logout()
                     .disable()
                 .authorizeRequests()
                     .antMatchers("/oauth2/**", "/auth/**", "/docs/**")
@@ -71,8 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
         corsConfig.addAllowedOrigin("*");
