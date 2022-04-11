@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,14 +22,10 @@ public class UserController {
 
     @GetMapping("/auth/token")
     public ResponseEntity<?> sendToken(@Valid TokenRequestDto tokenRequestDto) {
-        String accessToken = userService.createAccessToken(tokenRequestDto.getProvider(), tokenRequestDto.getToken());
-        if (accessToken == null) {
+        TokenResponseDto tokenResponseDto = userService.createAccessToken(tokenRequestDto.getProvider(), tokenRequestDto.getToken());
+        if (tokenResponseDto == null) {
             return ResponseEntity.badRequest().body(Map.of("message", "invalid token"));
         }
-
-        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .accessToken(accessToken)
-                .build();
 
         return ResponseEntity.ok(tokenResponseDto);
     }

@@ -1,5 +1,6 @@
 package com.jjss.civideo.domain.user.service;
 
+import com.jjss.civideo.domain.user.dto.TokenResponseDto;
 import com.jjss.civideo.domain.user.entity.Provider;
 import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
@@ -21,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public String createAccessToken(String provider, String token) {
+    public TokenResponseDto createAccessToken(String provider, String token) {
         Provider oAuth2Provider = Provider.valueOf(provider.toUpperCase());
 
         try {
@@ -38,9 +39,9 @@ public class UserService {
                     .filter((entry) -> entry.getKey() instanceof String)
                     .collect(Collectors.toMap(entry -> (String) entry.getKey(), Map.Entry::getValue));
 
-            String email = oAuth2Provider.getEmail(checkedBody);
-            User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
-                    .email(email)
+            String id = oAuth2Provider.getProviderId(checkedBody);
+            User user = userRepository.findByProviderId(id).orElseGet(() -> User.builder()
+                    .providerId(id)
                     .provider(oAuth2Provider)
                     .build());
 
@@ -48,7 +49,10 @@ public class UserService {
                 userRepository.save(user);
             }
 
-            return JwtProvider.createAccessToken(user.getId(), user.getEmail());
+            return TokenResponseDto.builder()
+                    .accessToken(JwtProvider.createAccessToken(user.getId(), user.getProviderId()))
+                    .code(user.getCode())
+                    .build();
         } catch (HttpClientErrorException e) {
             return null;
         }

@@ -8,7 +8,6 @@ import com.jjss.civideo.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -35,10 +34,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .orElse(MAIN_URL);
 
         Provider provider = Provider.valueOf(((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId().toUpperCase());
-        String email = provider.getEmail(((OAuth2User) (authentication.getPrincipal())).getAttributes());
 
-        User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
-                .email(email)
+        String id = authentication.getName();
+        User user = userRepository.findByProviderId(id).orElseGet(() -> User.builder()
+                .providerId(id)
                 .provider(provider)
                 .build());
 
@@ -46,7 +45,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             userRepository.save(user);
         }
 
-        String accessToken = JwtProvider.createAccessToken(user.getId(), email);
+        String accessToken = JwtProvider.createAccessToken(user.getId(), user.getProviderId());
         CookieUtil.addCookie(response, ACCESS_TOKEN_NAME, accessToken, ACCESS_TOKEN_EXPIRATION_SECONDS);
 
         getRedirectStrategy().sendRedirect(request, response, redirectUriAfterLogin);

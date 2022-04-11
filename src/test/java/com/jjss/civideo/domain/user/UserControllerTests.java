@@ -76,6 +76,7 @@ public class UserControllerTests extends BaseControllerTest {
                 );
     }
 
+
     @Test
     @WithMockUser
     @DisplayName("[GET /auth/token] validation을 통과하지 못하는 parameter로 호출 시 400 return")

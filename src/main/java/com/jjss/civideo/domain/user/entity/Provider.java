@@ -3,7 +3,6 @@ package com.jjss.civideo.domain.user.entity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Provider {
@@ -17,13 +16,13 @@ public enum Provider {
         }
 
         @Override
-        public String getEmail(Map<String, Object> attributes) {
-            return (String) attributes.get("email");
+        public HttpHeaders getHeader(String token) {
+            return HttpHeaders.EMPTY;
         }
 
         @Override
-        public HttpHeaders getHeader(String token) {
-            return HttpHeaders.EMPTY;
+        public String getProviderId(Map<String, Object> body) {
+            return body.get("sub").toString();
         }
     },
     KAKAO {
@@ -33,28 +32,22 @@ public enum Provider {
         }
 
         @Override
-        public String getEmail(Map<String, Object> attributes) {
-            Object accountInfo = attributes.get("kakao_account");
-            if (!(accountInfo instanceof LinkedHashMap)) {
-                return null;
-            }
-
-            return (String) ((LinkedHashMap<?, ?>) accountInfo).get("email");
-        }
-
-        @Override
         public HttpHeaders getHeader(String token) {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
             return httpHeaders;
         }
+
+        @Override
+        public String getProviderId(Map<String, Object> body) {
+            return body.get("id").toString();
+        }
     };
 
     public abstract String getTokenInfoUrl(String token);
 
-    public abstract String getEmail(Map<String, Object> attributes);
-
     public abstract HttpHeaders getHeader(String token);
 
+    public abstract String getProviderId(Map<String, Object> body);
 }
