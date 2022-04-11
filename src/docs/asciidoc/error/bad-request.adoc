@@ -1,11 +1,10 @@
+= 400 Bad Request
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 4
 :sectlinks:
-
-= 400 Bad Request
 
 [[request]]
 == Request

@@ -2,6 +2,7 @@ package com.jjss.civideo.domain.user;
 
 import com.jjss.civideo.config.BaseControllerTest;
 import com.jjss.civideo.domain.user.controller.UserController;
+import com.jjss.civideo.domain.user.dto.TokenResponseDto;
 import com.jjss.civideo.domain.user.service.UserService;
 import com.jjss.civideo.global.config.auth.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +24,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,13 +40,21 @@ public class UserControllerTests extends BaseControllerTest {
         String provider = "kakao";
         String token = "real-access-token";
 
-        when(userService.createAccessToken(provider, token)).thenReturn("jwt-token");
+        String jwtToken = "jwt-token";
+        String code = "1234567890";
+
+        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+                .accessToken(token)
+                .accessToken(jwtToken)
+                .code(code)
+                .build();
+
+        when(userService.createAccessToken(provider, token)).thenReturn(tokenResponseDto);
 
         mockMvc.perform(get("/auth/token")
                         .accept(MediaType.APPLICATION_JSON)
                         .param("provider", provider)
                         .param("token", token))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.access_token").exists())
                 .andDo(document("authentication/create-token",
@@ -61,7 +69,8 @@ public class UserControllerTests extends BaseControllerTest {
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
                                 ),
                                 responseFields(
-                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token")
+                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token"),
+                                        fieldWithPath("code").type(JsonFieldType.STRING).description("user에게 발급하는 random generated token (user code)")
                                 )
                         )
                 );
@@ -78,7 +87,6 @@ public class UserControllerTests extends BaseControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .param("provider", provider)
                         .param("token", token))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors").isNotEmpty())
