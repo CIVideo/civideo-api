@@ -1,11 +1,10 @@
+= access token 조회
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 4
 :sectlinks:
-
-= access token 조회
 
 [[request]]
 == Request

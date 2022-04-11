@@ -180,3 +180,4 @@ gradle-app.setting
 bin/
 *-secret.*
 logs/
+src/main/resources/static/
