@@ -49,10 +49,14 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
-def querydslSrcDir = "$buildDir/generated/querydsl" as String
+ext {
+    querydslSrcDir = "$buildDir/generated/querydsl" as String
+    snippetsDir = file('build/generated-snippets')
+}
 
 test {
     useJUnitPlatform()
+    outputs.dir snippetsDir
 }
 
 querydsl {
@@ -74,17 +78,14 @@ jar {
 }
 
 asciidoctor {
+    inputs.dir snippetsDir
     configurations 'asciidoctorExt'
     dependsOn test
 }
 
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
-
 bootJar {
-    dependsOn copyDocument
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
