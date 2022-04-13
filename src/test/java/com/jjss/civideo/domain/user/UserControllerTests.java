@@ -113,4 +113,36 @@ public class UserControllerTests extends BaseControllerTest {
                 );
     }
 
+//    @Test
+//    @DisplayName("[GET /auth/token] 인증 처리가 되지 않은 상태에서 호출 시 401 return")
+//    public void sendToken_whenUnauthorized_then401() throws Exception {
+//        String provider = "??";
+//        String token = "idontknow";
+//
+//        mockMvc.perform(get("/auth/token")
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .param("provider", provider)
+//                        .param("token", token))
+//                .andExpect(status().isUnauthorized())
+//                .andExpect(jsonPath("$.request_url").exists())
+//                .andExpect(jsonPath("$.message").exists())
+//                .andDo(document("error/unauthorized",
+//                                requestHeaders(
+//                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
+//                                ),
+//                                requestParameters(
+//                                        parameterWithName("provider").description("OAuth2 provider"),
+//                                        parameterWithName("token").description("provider가 발급해준 access token")
+//                                ),
+//                                responseHeaders(
+//                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+//                                ),
+//                                responseFields(
+//                                        fieldWithPath("request_url").type(JsonFieldType.STRING).description("요청 URI"),
+//                                        fieldWithPath("message").type(JsonFieldType.STRING).description("error description")
+//                                )
+//                        )
+//                );
+//    }
+
 }
