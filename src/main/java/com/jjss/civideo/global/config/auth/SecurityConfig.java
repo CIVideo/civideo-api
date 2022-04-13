@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                     .disable()
                 .authorizeRequests()
-                    .antMatchers("/oauth2/**", "/auth/**", "/docs/**")
+                    .antMatchers("/oauth2/**", "/auth/**", "/ui/**", "/docs/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()

@@ -1,0 +1,38 @@
+= Mobile 하단 tap bar 정보 조회
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[request]]
+== Request
+
+include::{snippets}/mobile/tap-bar/curl-request.adoc[]
+include::{snippets}/mobile/tap-bar/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/mobile/tap-bar/request-headers.adoc[]
+
+=== Request Parameters
+
+include::{snippets}/mobile/tap-bar/request-parameters.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/mobile/tap-bar/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/mobile/tap-bar/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/mobile/tap-bar/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/mobile/tap-bar/response-body.adoc[]

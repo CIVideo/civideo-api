@@ -85,3 +85,8 @@
 === Authentication
 
 ==== link:./authentication/create-token.html[`[GET /auth/token\] token 받기`]
+
+[[mobile]]
+=== Mobile
+
+==== link:./mobile/tap-bar.html[`[GET /ui/tapbar\] tap bar 정보`]
