@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
     private final OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
@@ -62,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                     .redirectionEndpoint()
                         .baseUri("/oauth2/callback/*")
+                        .and()
+                    .userInfoEndpoint()
+                        .userService(customOAuth2UserService)
                         .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .failureHandler(OAuth2AuthenticationFailureHandler)

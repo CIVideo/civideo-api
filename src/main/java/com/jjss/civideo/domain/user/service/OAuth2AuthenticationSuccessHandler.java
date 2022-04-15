@@ -3,6 +3,7 @@ package com.jjss.civideo.domain.user.service;
 import com.jjss.civideo.domain.user.entity.Provider;
 import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
+import com.jjss.civideo.global.config.auth.CustomOAuth2UserService;
 import com.jjss.civideo.global.util.CookieUtil;
 import com.jjss.civideo.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -33,17 +34,20 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .map(Cookie::getValue)
                 .orElse(MAIN_URL);
 
-        Provider provider = Provider.valueOf(((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId().toUpperCase());
+        String provider = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+        Provider oAuth2Provider = Provider.valueOf(provider.toUpperCase());
 
         String id = authentication.getName();
         User user = userRepository.findByProviderId(id).orElseGet(() -> User.builder()
                 .providerId(id)
-                .provider(provider)
+                .provider(oAuth2Provider)
                 .build());
 
         if (user.getId() == null) {
             userRepository.save(user);
         }
+
+        oAuth2Provider.logout(CustomOAuth2UserService.accessToken.get());
 
         String accessToken = JwtProvider.createAccessToken(user.getId(), user.getProviderId());
         CookieUtil.addCookie(response, ACCESS_TOKEN_NAME, accessToken, ACCESS_TOKEN_EXPIRATION_SECONDS);
