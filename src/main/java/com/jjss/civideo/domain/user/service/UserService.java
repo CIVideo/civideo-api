@@ -6,12 +6,9 @@ import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
 import com.jjss.civideo.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,13 +23,13 @@ public class UserService {
         Provider oAuth2Provider = Provider.valueOf(provider.toUpperCase());
 
         try {
-            Map<?, ?> body = new RestTemplate()
-                    .exchange(oAuth2Provider.getTokenInfoUrl(token), HttpMethod.GET, new HttpEntity<>(oAuth2Provider.getHeader(token)), Map.class)
-                    .getBody();
+            Map<?, ?> body = oAuth2Provider.getTokenInfo(token);
 
             if (body == null) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
             }
+
+            oAuth2Provider.logout(token);
 
             Map<String, Object> checkedBody = body.entrySet()
                     .stream()
