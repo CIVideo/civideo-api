@@ -1,6 +1,8 @@
 package com.jjss.civideo.global.config.auth;
 
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -18,10 +20,11 @@ public class OAuth2AuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("request_url", request.getRequestURI());
-        jsonObject.put("message", "인증이 필요한 리소스입니다.");
-        response.getWriter().write(String.valueOf(jsonObject));
+        response.getWriter().write(
+                new ObjectMapper()
+                        .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                        .writeValueAsString(UnauthorizedResponseDto.of(authException))
+        );
     }
 
 }

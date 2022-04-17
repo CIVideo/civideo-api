@@ -17,7 +17,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -40,16 +42,17 @@ public class UserControllerTests extends BaseControllerTest {
         String provider = "kakao";
         String token = "real-access-token";
 
-        String jwtToken = "jwt-token";
+        String accessToken = "access-token";
+        String refreshToken = "refresh-token";
         String code = "1234567890";
 
         TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .accessToken(token)
-                .accessToken(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .code(code)
                 .build();
 
-        when(userService.createAccessToken(provider, token)).thenReturn(tokenResponseDto);
+        when(userService.createToken(provider, token)).thenReturn(tokenResponseDto);
 
         mockMvc.perform(get("/auth/token")
                         .accept(MediaType.APPLICATION_JSON)
@@ -70,6 +73,7 @@ public class UserControllerTests extends BaseControllerTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token"),
+                                        fieldWithPath("refresh_token").type(JsonFieldType.STRING).description("Server에서 발급한 refresh token"),
                                         fieldWithPath("code").type(JsonFieldType.STRING).description("user에게 발급하는 random generated token (user code)")
                                 )
                         )

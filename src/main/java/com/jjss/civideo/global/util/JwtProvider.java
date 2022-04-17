@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -17,8 +18,10 @@ import java.security.Key;
 import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public final class JwtProvider {
@@ -26,7 +29,7 @@ public final class JwtProvider {
     public static final String ACCESS_TOKEN_NAME = "access_token";
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
     public static final int ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 30; // 30m (unit: second)
-    public static final int REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 7d (unit: second)
+    public static final int REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 60; // 60d (unit: second)
 
     private static Key KEY;
 
@@ -47,6 +50,28 @@ public final class JwtProvider {
 
     public static String createRefreshToken(Long userId, String email) {
         return createToken(userId, email, REFRESH_TOKEN_EXPIRATION_SECONDS);
+    }
+
+    public static Authentication authenticate(String jwtToken) throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
+        Jws<Claims> claims = getClaims(jwtToken);
+        Claims body = claims.getBody();
+        if (isExpired(body.getExpiration())) {
+            throw new ExpiredJwtException(claims.getHeader(), body, null);
+        }
+        String id = (String) body.get("sub");
+
+        return new UsernamePasswordAuthenticationToken(id, null, Set.of(new SimpleGrantedAuthority("USER")));
+    }
+
+    public static Jws<Claims> getClaims(String jwtToken) throws ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
+        return Jwts.parserBuilder()
+                .setSigningKey(KEY)
+                .build()
+                .parseClaimsJws(jwtToken);
+    }
+
+    public static boolean isExpired(Date exp) {
+        return new Date().getTime() > exp.getTime() / 1000;
     }
 
     private static String createToken(Long userId, String providerId, int expirationTime) {
@@ -77,21 +102,6 @@ public final class JwtProvider {
         payloads.put("userId", userId);
 
         return payloads;
-    }
-
-    public static Jws<Claims> getClaims(String jwt) throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
-        return Jwts.parserBuilder()
-                .setSigningKey(KEY)
-                .build()
-                .parseClaimsJws(jwt);
-    }
-
-    public static Authentication authenticate(String jwtToken) throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
-        Jws<Claims> claims = getClaims(jwtToken);
-        Claims body = claims.getBody();
-        String id = (String) body.get("sub");
-
-        return new UsernamePasswordAuthenticationToken(id, null);
     }
 
 }

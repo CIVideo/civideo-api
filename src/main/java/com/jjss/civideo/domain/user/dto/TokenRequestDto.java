@@ -11,8 +11,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 public class TokenRequestDto {
 
-    @NotBlank(message = "access token은 필수 값입니다.")
-    @NotEmpty(message = "access token값은 비어 있을 수 없습니다.")
+    @NotBlank(message = "access token은 비어 있을 수 없습니다.")
     private String token;
 
     @NotBlank(message = "provider는 필수 값입니다.")
