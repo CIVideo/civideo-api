@@ -5,9 +5,9 @@ import com.jjss.civideo.domain.user.dto.TokenRequestDto;
 import com.jjss.civideo.domain.user.dto.TokenResponseDto;
 import com.jjss.civideo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +23,11 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/token")
-    public ResponseEntity<?> sendToken(@Valid TokenRequestDto tokenRequestDto) {
+    @PostMapping(value = "/token", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendToken(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
         TokenResponseDto tokenResponseDto = userService.createToken(tokenRequestDto.getProvider(), tokenRequestDto.getToken());
         if (tokenResponseDto == null) {
-            return ResponseEntity.badRequest().body(Map.of("message", "invalid token"));
+            return new ResponseEntity<>(Map.of("message", "invalid token"), HttpStatus.UNAUTHORIZED);
         }
 
         return ResponseEntity.ok(tokenResponseDto);

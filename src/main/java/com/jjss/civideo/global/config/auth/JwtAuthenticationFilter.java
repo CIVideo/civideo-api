@@ -3,11 +3,9 @@ package com.jjss.civideo.global.config.auth;
 import com.jjss.civideo.global.util.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.SignatureException;
 
-@Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -39,12 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        String AuthorizationHeader = request.getHeader("Authorization");
-        if (!StringUtils.hasText(AuthorizationHeader) || !AuthorizationHeader.startsWith("Bearer ")) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
             return null;
         }
 
-        return AuthorizationHeader.substring(7);
+        return authorizationHeader.substring(7);
     }
 
 }

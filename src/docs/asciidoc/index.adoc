@@ -84,7 +84,8 @@
 [[auth]]
 === Authentication
 
-==== link:./authentication/create-token.html[`[GET /auth/token\] token 받기`]
+==== link:./authentication/create-token.html[`[POST /auth/token\] token 받기`]
+==== link:./authentication/refresh-token.html[`[POST /auth/refresh\] token 재발급`]
 
 [[mobile]]
 === Mobile

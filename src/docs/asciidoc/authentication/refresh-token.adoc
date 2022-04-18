@@ -1,0 +1,41 @@
+= access token 재발급
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+아직 만료되지 않은 refresh token을 담아 호출하면 검증 후 새 access token과 refresh token을 반환합니다.
+
+[[request]]
+== Request
+
+include::{snippets}/authentication/refresh-token/curl-request.adoc[]
+include::{snippets}/authentication/refresh-token/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/authentication/refresh-token/request-headers.adoc[]
+
+=== Request Body
+
+include::{snippets}/authentication/refresh-token/request-body.adoc[]
+include::{snippets}/authentication/refresh-token/request-fields.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/authentication/refresh-token/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/authentication/refresh-token/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/authentication/refresh-token/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/authentication/refresh-token/response-body.adoc[]
