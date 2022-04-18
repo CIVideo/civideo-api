@@ -6,6 +6,8 @@
 :toclevels: 4
 :sectlinks:
 
+provider와 provider에서 제공한 access token을 담아 호출하면 검증 후 Server의 API에 access가 가능한 access token과 random generated code를 발급합니다.
+
 [[request]]
 == Request
 
@@ -16,9 +18,10 @@ include::{snippets}/authentication/create-token/http-request.adoc[]
 
 include::{snippets}/authentication/create-token/request-headers.adoc[]
 
-=== Request Parameters
+=== Request Body
 
-include::{snippets}/authentication/create-token/request-parameters.adoc[]
+include::{snippets}/authentication/create-token/request-body.adoc[]
+include::{snippets}/authentication/create-token/request-fields.adoc[]
 
 [[response]]
 == Response

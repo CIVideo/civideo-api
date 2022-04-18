@@ -59,6 +59,30 @@ public enum Provider {
 
             new RestTemplate().postForObject("https://kapi.kakao.com/v1/user/logout", new HttpEntity<>(httpHeaders), Void.class);
         }
+    },
+    APPLE {
+        @Override
+        public Map<?, ?> getTokenInfo(String token) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+            return new RestTemplate()
+                    .exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.GET, new HttpEntity<>(httpHeaders), Map.class)
+                    .getBody();
+        }
+
+        @Override
+        public String getProviderId(Map<String, Object> body) {
+            return body.get("id").toString();
+        }
+
+        @Override
+        public void logout(String token) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setBearerAuth(token);
+
+            new RestTemplate().postForObject("https://kapi.kakao.com/v1/user/logout", new HttpEntity<>(httpHeaders), Void.class);
+        }
     };
 
     public abstract Map<?, ?> getTokenInfo(String token);

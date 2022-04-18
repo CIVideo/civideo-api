@@ -16,9 +16,10 @@ include::{snippets}/error/bad-request/http-request.adoc[]
 
 include::{snippets}/error/bad-request/request-headers.adoc[]
 
-=== Request Parameters
+=== Request Body
 
-include::{snippets}/error/bad-request/request-parameters.adoc[]
+include::{snippets}/error/bad-request/request-body.adoc[]
+include::{snippets}/error/bad-request/request-fields.adoc[]
 
 [[response]]
 == Response

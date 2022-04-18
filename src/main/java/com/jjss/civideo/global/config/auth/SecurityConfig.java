@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,17 +20,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final String[] ignoringMatchers = {"/favicon.ico", "/auth/**", "/error/**", "/docs/**"};
+    private final String[] permitAllMatchers = {"/oauth2/**"};
+
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler OAuth2AuthenticationFailureHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
 
     @Override
     public void configure(WebSecurity web) {
         web
                 .ignoring()
-                .mvcMatchers("/favicon.ico");
+                .mvcMatchers(ignoringMatchers);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                     .disable()
                 .authorizeRequests()
-                    .antMatchers("/oauth2/**", "/auth/**", "/ui/**", "/docs/**")
+                    .mvcMatchers(permitAllMatchers)
                         .permitAll()
                     .anyRequest()
                         .authenticated()
@@ -68,10 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .userService(customOAuth2UserService)
                         .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(OAuth2AuthenticationFailureHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler)
                     .and()
                 .exceptionHandling()
-                    .authenticationEntryPoint(oAuth2AuthenticationEntryPoint);
+                    .authenticationEntryPoint(oAuth2AuthenticationEntryPoint)
+                    .and()
+                .addFilterAfter(new JwtAuthenticationFilter(), OAuth2LoginAuthenticationFilter.class);
         // @formatter:on
     }
 

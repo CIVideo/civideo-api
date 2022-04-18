@@ -2,6 +2,8 @@ package com.jjss.civideo.domain.user;
 
 import com.jjss.civideo.config.BaseControllerTest;
 import com.jjss.civideo.domain.user.controller.UserController;
+import com.jjss.civideo.domain.user.dto.RefreshRequestDto;
+import com.jjss.civideo.domain.user.dto.TokenRequestDto;
 import com.jjss.civideo.domain.user.dto.TokenResponseDto;
 import com.jjss.civideo.domain.user.service.UserService;
 import com.jjss.civideo.global.config.auth.SecurityConfig;
@@ -19,13 +21,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = UserController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 public class UserControllerTests extends BaseControllerTest {
@@ -34,60 +32,68 @@ public class UserControllerTests extends BaseControllerTest {
     UserService userService;
 
     @Test
-    @WithMockUser
-    @DisplayName("[GET /auth/token] validation을 통과하는 parameter로 호출 시 200 return")
+    @DisplayName("[POST /auth/token] validation을 통과하는 parameter로 호출 시 200 return")
     public void sendToken_whenSendRightValue_then200() throws Exception {
         String provider = "kakao";
         String token = "real-access-token";
 
-        String jwtToken = "jwt-token";
+        String accessToken = "access-token";
+        String refreshToken = "refresh-token";
         String code = "1234567890";
 
+        TokenRequestDto tokenRequestDto = new TokenRequestDto();
+        tokenRequestDto.setProvider(provider);
+        tokenRequestDto.setToken(token);
+
         TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .accessToken(token)
-                .accessToken(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .code(code)
                 .build();
 
-        when(userService.createAccessToken(provider, token)).thenReturn(tokenResponseDto);
+        when(userService.createToken(provider, token)).thenReturn(tokenResponseDto);
 
-        mockMvc.perform(get("/auth/token")
+        mockMvc.perform(post("/auth/token")
                         .accept(MediaType.APPLICATION_JSON)
-                        .param("provider", provider)
-                        .param("token", token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tokenRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.access_token").exists())
                 .andDo(document("authentication/create-token",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
+                                        headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
                                 ),
-                                requestParameters(
-                                        parameterWithName("provider").description("OAuth2 provider"),
-                                        parameterWithName("token").description("provider가 발급해준 access token")
+                                requestFields(
+                                        fieldWithPath("provider").description("OAuth2 provider"),
+                                        fieldWithPath("token").description("provider가 발급해준 access token")
                                 ),
                                 responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
                                 ),
                                 responseFields(
                                         fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token"),
+                                        fieldWithPath("refresh_token").type(JsonFieldType.STRING).description("Server에서 발급한 refresh token"),
                                         fieldWithPath("code").type(JsonFieldType.STRING).description("user에게 발급하는 random generated token (user code)")
                                 )
                         )
                 );
     }
 
-
     @Test
-    @WithMockUser
-    @DisplayName("[GET /auth/token] validation을 통과하지 못하는 parameter로 호출 시 400 return")
+    @DisplayName("[POST /auth/token] validation을 통과하지 못하는 parameter로 호출 시 400 return")
     public void sendToken_whenSendNotValidValue_then400() throws Exception {
         String provider = "??";
         String token = "idontknow";
 
-        mockMvc.perform(get("/auth/token")
+        TokenRequestDto tokenRequestDto = new TokenRequestDto();
+        tokenRequestDto.setProvider(provider);
+        tokenRequestDto.setToken(token);
+
+        mockMvc.perform(post("/auth/token")
                         .accept(MediaType.APPLICATION_JSON)
-                        .param("provider", provider)
-                        .param("token", token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tokenRequestDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors").isNotEmpty())
@@ -95,14 +101,15 @@ public class UserControllerTests extends BaseControllerTest {
                 .andExpect(jsonPath("$.errors[*].message").exists())
                 .andDo(document("error/bad-request",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
+                                        headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
                                 ),
-                                requestParameters(
-                                        parameterWithName("provider").description("OAuth2 provider"),
-                                        parameterWithName("token").description("provider가 발급해준 access token")
+                                requestFields(
+                                        fieldWithPath("provider").description("OAuth2 provider"),
+                                        fieldWithPath("token").description("provider가 발급해준 access token")
                                 ),
                                 responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
                                 ),
                                 responseFields(
                                         fieldWithPath("errors").type(JsonFieldType.ARRAY).description("An array of field errors"),
@@ -113,36 +120,50 @@ public class UserControllerTests extends BaseControllerTest {
                 );
     }
 
-//    @Test
-//    @DisplayName("[GET /auth/token] 인증 처리가 되지 않은 상태에서 호출 시 401 return")
-//    public void sendToken_whenUnauthorized_then401() throws Exception {
-//        String provider = "??";
-//        String token = "idontknow";
-//
-//        mockMvc.perform(get("/auth/token")
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .param("provider", provider)
-//                        .param("token", token))
-//                .andExpect(status().isUnauthorized())
-//                .andExpect(jsonPath("$.request_url").exists())
-//                .andExpect(jsonPath("$.message").exists())
-//                .andDo(document("error/unauthorized",
-//                                requestHeaders(
-//                                        headerWithName(HttpHeaders.ACCEPT).description("Accept header")
-//                                ),
-//                                requestParameters(
-//                                        parameterWithName("provider").description("OAuth2 provider"),
-//                                        parameterWithName("token").description("provider가 발급해준 access token")
-//                                ),
-//                                responseHeaders(
-//                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
-//                                ),
-//                                responseFields(
-//                                        fieldWithPath("request_url").type(JsonFieldType.STRING).description("요청 URI"),
-//                                        fieldWithPath("message").type(JsonFieldType.STRING).description("error description")
-//                                )
-//                        )
-//                );
-//    }
+    @Test
+    @WithMockUser
+    @DisplayName("[POST /auth/refresh] validation을 통과하는 parameter로 호출 시 200 return")
+    public void refresh_whenSendRightValue_then200() throws Exception {
+        String refreshToken = "valid-refresh-token";
+
+        RefreshRequestDto refreshRequestDto = new RefreshRequestDto();
+        refreshRequestDto.setRefreshToken(refreshToken);
+
+        String accessToken = "access-token";
+        String newRefreshToken = "new-refresh-token";
+
+        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(newRefreshToken)
+                .build();
+
+        when(userService.refresh(refreshToken)).thenReturn(tokenResponseDto);
+
+        mockMvc.perform(post("/auth/refresh")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshRequestDto)))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.access_token").exists())
+                .andExpect(jsonPath("$.refresh_token").exists())
+                .andDo(document("authentication/refresh-token",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
+                                ),
+                                requestFields(
+                                        fieldWithPath("refresh_token").description("만료되지 않은 refresh token")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
+                                ),
+                                responseFields(
+                                        fieldWithPath("access_token").type(JsonFieldType.STRING).description("Server에서 발급한 access token"),
+                                        fieldWithPath("refresh_token").type(JsonFieldType.STRING).description("Server에서 발급한 refresh token")
+                                )
+                        )
+                );
+    }
 
 }

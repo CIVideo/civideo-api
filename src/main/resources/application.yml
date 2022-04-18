@@ -1,7 +1,6 @@
 spring:
-  profiles:
-    include:
-      - secret
+  config:
+    import: classpath:application-secret.yml
   output:
     ansi:
       enabled: always
@@ -19,8 +18,6 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
   mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
     throw-exception-if-no-handler-found: true
   web:
     resources:

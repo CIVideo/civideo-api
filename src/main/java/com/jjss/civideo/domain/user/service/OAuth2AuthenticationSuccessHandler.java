@@ -21,6 +21,8 @@ import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRep
 import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_EXPIRATION_SECONDS;
 import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_NAME;
+import static com.jjss.civideo.global.util.JwtProvider.REFRESH_TOKEN_EXPIRATION_SECONDS;
+import static com.jjss.civideo.global.util.JwtProvider.REFRESH_TOKEN_NAME;
 
 @Component
 @RequiredArgsConstructor
@@ -50,7 +52,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         oAuth2Provider.logout(CustomOAuth2UserService.accessToken.get());
 
         String accessToken = JwtProvider.createAccessToken(user.getId(), user.getProviderId());
+        String refreshToken = JwtProvider.createRefreshToken(user.getId(), user.getProviderId());
+
         CookieUtil.addCookie(response, ACCESS_TOKEN_NAME, accessToken, ACCESS_TOKEN_EXPIRATION_SECONDS);
+        CookieUtil.addCookie(response, REFRESH_TOKEN_NAME, refreshToken, REFRESH_TOKEN_EXPIRATION_SECONDS);
 
         getRedirectStrategy().sendRedirect(request, response, redirectUriAfterLogin);
     }
