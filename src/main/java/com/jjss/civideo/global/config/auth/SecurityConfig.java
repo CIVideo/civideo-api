@@ -3,6 +3,7 @@ package com.jjss.civideo.global.config.auth;
 import com.jjss.civideo.domain.user.service.OAuth2AuthenticationFailureHandler;
 import com.jjss.civideo.domain.user.service.OAuth2AuthenticationSuccessHandler;
 import com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository;
+import com.jjss.civideo.global.config.log.LoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -77,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                     .authenticationEntryPoint(oAuth2AuthenticationEntryPoint)
                     .and()
+                .addFilterBefore(new LoggingFilter(), OAuth2LoginAuthenticationFilter.class)
                 .addFilterAfter(new JwtAuthenticationFilter(), OAuth2LoginAuthenticationFilter.class);
         // @formatter:on
     }
