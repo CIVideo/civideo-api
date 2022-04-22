@@ -1,6 +1,6 @@
 package com.jjss.civideo.domain.user.entity;
 
-import com.jjss.civideo.domain.couple.Couple;
+import com.jjss.civideo.domain.couple.entity.Couple;
 import com.jjss.civideo.global.config.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,19 +14,22 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
 import java.util.Random;
 
+@SequenceGenerator(name = "USER_SEQ_GENERATOR", sequenceName = "USER_SEQUENCES")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_GENERATOR")
     @Column(name = "user_id")
     private Long id;
 
@@ -62,6 +65,10 @@ public class User extends BaseEntity {
         this.providerId = providerId;
         this.provider = provider;
         this.code = createCode();
+    }
+
+    public void match(Couple couple) {
+        this.couple = couple;
     }
 
     private String createCode() {

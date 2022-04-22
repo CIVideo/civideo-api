@@ -19,9 +19,8 @@ import java.io.IOException;
 
 import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.MAIN_URL;
 import static com.jjss.civideo.domain.user.service.OAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_EXPIRATION_SECONDS;
 import static com.jjss.civideo.global.util.JwtProvider.ACCESS_TOKEN_NAME;
-import static com.jjss.civideo.global.util.JwtProvider.REFRESH_TOKEN_EXPIRATION_SECONDS;
+import static com.jjss.civideo.global.util.JwtProvider.REFRESH_TOKEN_EXPIRATION_MILLISECONDS;
 import static com.jjss.civideo.global.util.JwtProvider.REFRESH_TOKEN_NAME;
 
 @Component
@@ -54,8 +53,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = JwtProvider.createAccessToken(user.getId(), user.getProviderId());
         String refreshToken = JwtProvider.createRefreshToken(user.getId(), user.getProviderId());
 
-        CookieUtil.addCookie(response, ACCESS_TOKEN_NAME, accessToken, ACCESS_TOKEN_EXPIRATION_SECONDS);
-        CookieUtil.addCookie(response, REFRESH_TOKEN_NAME, refreshToken, REFRESH_TOKEN_EXPIRATION_SECONDS);
+        CookieUtil.addCookie(response, ACCESS_TOKEN_NAME, accessToken, REFRESH_TOKEN_EXPIRATION_MILLISECONDS);
+        CookieUtil.addCookie(response, REFRESH_TOKEN_NAME, refreshToken, REFRESH_TOKEN_EXPIRATION_MILLISECONDS);
 
         getRedirectStrategy().sendRedirect(request, response, redirectUriAfterLogin);
     }

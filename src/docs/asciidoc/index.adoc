@@ -85,9 +85,15 @@
 === Authentication
 
 ==== link:./authentication/create-token.html[`[POST /auth/token\] token 받기`]
+
 ==== link:./authentication/refresh-token.html[`[POST /auth/refresh\] token 재발급`]
 
 [[mobile]]
 === Mobile
 
 ==== link:./mobile/tap-bar.html[`[GET /ui/tapbar\] tap bar 정보`]
+
+[[couple]]
+=== Couple
+
+==== link:./couple/match.html[`[POST /auth/refresh\] 커플 매칭`]
