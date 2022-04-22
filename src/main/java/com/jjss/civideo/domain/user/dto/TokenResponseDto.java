@@ -9,10 +9,10 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TokenResponseDto {
 
-    private String accessToken;
+    private final String accessToken;
 
-    private String refreshToken;
+    private final String refreshToken;
 
-    private String code;
+    private final String code;
 
 }

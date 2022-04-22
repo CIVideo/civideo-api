@@ -13,7 +13,7 @@ public class UnauthorizedResponseDto {
 
     public static UnauthorizedResponseDto of(Exception exception) {
         return new UnauthorizedResponseDto(
-                UnauthorizedExceptionType.valueOf(
+                UnauthorizedType.valueOf(
                         CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, exception.getClass().getSimpleName())
                 ).getMessage()
         );

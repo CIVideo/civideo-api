@@ -16,8 +16,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SignatureException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +26,8 @@ public final class JwtProvider {
 
     public static final String ACCESS_TOKEN_NAME = "access_token";
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
-    public static final int ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 30; // 30m (unit: second)
-    public static final int REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 60; // 60d (unit: second)
+    public static final int ACCESS_TOKEN_EXPIRATION_MILLISECONDS = 1000 * 60 * 30; // 30m (unit: ms)
+    public static final int REFRESH_TOKEN_EXPIRATION_MILLISECONDS = 1000 * 60 * 60 * 24 * 60; // 60d (unit: ms)
 
     private static Key KEY;
 
@@ -45,22 +43,24 @@ public final class JwtProvider {
     }
 
     public static String createAccessToken(Long userId, String providerId) {
-        return createToken(userId, providerId, ACCESS_TOKEN_EXPIRATION_SECONDS);
+        Date exp = new Date();
+        exp.setTime(exp.getTime() + ACCESS_TOKEN_EXPIRATION_MILLISECONDS);
+        return createToken(userId, providerId, exp);
     }
 
-    public static String createRefreshToken(Long userId, String email) {
-        return createToken(userId, email, REFRESH_TOKEN_EXPIRATION_SECONDS);
+    public static String createRefreshToken(Long userId, String providerId) {
+        Date exp = new Date();
+        exp.setTime(exp.getTime() + REFRESH_TOKEN_EXPIRATION_MILLISECONDS);
+        return createToken(userId, providerId, exp);
     }
 
     public static Authentication authenticate(String jwtToken) throws SignatureException, ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
         Jws<Claims> claims = getClaims(jwtToken);
         Claims body = claims.getBody();
-        if (isExpired(body.getExpiration())) {
-            throw new ExpiredJwtException(claims.getHeader(), body, null);
-        }
-        String id = (String) body.get("sub");
 
-        return new UsernamePasswordAuthenticationToken(id, null, Set.of(new SimpleGrantedAuthority("USER")));
+        long userId = ((Integer) body.get("userId")).longValue();
+
+        return new UsernamePasswordAuthenticationToken(userId, "", Set.of(new SimpleGrantedAuthority("USER")));
     }
 
     public static Jws<Claims> getClaims(String jwtToken) throws ExpiredJwtException, MalformedJwtException, IllegalArgumentException {
@@ -70,14 +70,11 @@ public final class JwtProvider {
                 .parseClaimsJws(jwtToken);
     }
 
-    public static boolean isExpired(Date exp) {
-        return new Date().getTime() > exp.getTime() / 1000;
-    }
-
-    private static String createToken(Long userId, String providerId, int expirationTime) {
+    private static String createToken(Long userId, String providerId, Date ext) {
         return Jwts.builder()
                 .setHeader(createHeaders())
-                .setClaims(createPayloads(userId, providerId, expirationTime))
+                .setClaims(createPayloads(userId, providerId))
+                .setExpiration(ext)
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -90,15 +87,11 @@ public final class JwtProvider {
         return headers;
     }
 
-    private static Map<String, Object> createPayloads(Long userId, String providerId, int expirationTime) {
-        LocalDateTime now = LocalDateTime.now();
-        long time = Timestamp.valueOf(now).getTime();
+    private static Map<String, Object> createPayloads(Long userId, String providerId) {
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("iss", "https://api.civideo.com");
         payloads.put("sub", providerId);
         payloads.put("aud", "https://civideo.com");
-        payloads.put("iat", time);
-        payloads.put("exp", time + expirationTime);
         payloads.put("userId", userId);
 
         return payloads;

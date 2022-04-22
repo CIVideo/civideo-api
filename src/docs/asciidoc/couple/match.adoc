@@ -1,0 +1,41 @@
+= Couple Match
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+입력받은 상대의 code를 담아 호출하면 커플 매칭 업데이트 후 생성된 커플 데이터에 대한 식별 값을 return 합니다.
+
+[[request]]
+== Request
+
+include::{snippets}/couple/match/curl-request.adoc[]
+include::{snippets}/couple/match/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/couple/match/request-headers.adoc[]
+
+=== Request Body
+
+include::{snippets}/couple/match/request-body.adoc[]
+include::{snippets}/couple/match/request-fields.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/couple/match/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/couple/match/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/couple/match/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/couple/match/response-body.adoc[]

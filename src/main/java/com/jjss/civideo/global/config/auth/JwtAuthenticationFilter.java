@@ -1,5 +1,8 @@
 package com.jjss.civideo.global.config.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.util.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -22,16 +25,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
-        if (token != null) {
-            try {
-                Authentication authentication = JwtProvider.authenticate(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (SignatureException | ExpiredJwtException | MalformedJwtException | IllegalArgumentException e) {
-                logger.info("JWT Token authenticate exception: {}", e);
-            }
+        try {
+            Authentication authentication = JwtProvider.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } catch (SignatureException | ExpiredJwtException | MalformedJwtException | IllegalArgumentException e) {
+            handleUnauthorized(response, e);
         }
 
-        filterChain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {
@@ -41,6 +42,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         return authorizationHeader.substring(7);
+    }
+
+    private void handleUnauthorized(HttpServletResponse response, Exception e) throws IOException {
+        logger.info("JWT Token authenticate exception in " + this.getClass().getSimpleName(), e);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter().write(
+                new ObjectMapper()
+                        .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                        .writeValueAsString(UnauthorizedResponseDto.of(e))
+        );
     }
 
 }

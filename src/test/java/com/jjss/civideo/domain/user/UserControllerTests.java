@@ -18,12 +18,18 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 public class UserControllerTests extends BaseControllerTest {
@@ -51,7 +57,7 @@ public class UserControllerTests extends BaseControllerTest {
                 .code(code)
                 .build();
 
-        when(userService.createToken(provider, token)).thenReturn(tokenResponseDto);
+        given(userService.createToken(provider, token)).willReturn(tokenResponseDto);
 
         mockMvc.perform(post("/auth/token")
                         .accept(MediaType.APPLICATION_JSON)
@@ -137,7 +143,7 @@ public class UserControllerTests extends BaseControllerTest {
                 .refreshToken(newRefreshToken)
                 .build();
 
-        when(userService.refresh(refreshToken)).thenReturn(tokenResponseDto);
+        given(userService.refresh(refreshToken)).willReturn(tokenResponseDto);
 
         mockMvc.perform(post("/auth/refresh")
                         .accept(MediaType.APPLICATION_JSON)

@@ -73,9 +73,6 @@ public class UserService {
     public TokenResponseDto refresh(String refreshToken) {
         Jws<Claims> claims = JwtProvider.getClaims(refreshToken);
         Claims body = claims.getBody();
-        if (JwtProvider.isExpired(body.getExpiration())) {
-            throw new ExpiredJwtException(claims.getHeader(), body, null);
-        }
 
         String savedRefreshToken = redisTemplate.opsForValue().get(refreshToken);
         if (savedRefreshToken == null) {

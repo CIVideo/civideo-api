@@ -25,7 +25,9 @@ public class BadRequestResponseDto {
     private static List<Map<String, String>> toList(Errors errors) {
         return errors.getFieldErrors()
                 .stream()
-                .map(error -> Map.of("field", CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, error.getField()), "message", Objects.requireNonNull(error.getDefaultMessage())))
+                .map(error -> Map.of(
+                        "field", CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, error.getField()),
+                        "message", Objects.requireNonNull(error.getDefaultMessage())))
                 .collect(Collectors.toList());
     }
 
