@@ -5,7 +5,8 @@ on:
     branches: [ main ]
 
 env:
-  APPLICATION_SECRET_FILE: src/main/resources/application-secret.yml
+  APPLICATION_SECRET_FILE_PATH: src/main/resources/application-secret.yml
+  APPLE_AUTH_KEY_FILE_PATH: src/main/resources/key/AuthKey.p8
 
 jobs:
   build:
@@ -29,7 +30,10 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          cat << EOF >> ${{ env.APPLICATION_SECRET_FILE }}
+          cat << EOF >> ${{ env.APPLICATION_SECRET_FILE_PATH }}
           ${{ secrets.APPLICATION_SECRET }}
+          EOF
+          cat << EOF >> ${{ env.APPLE_AUTH_KEY_FILE_PATH }}
+          ${{ secrets.APPLE_AUTH_KEY }}
           EOF
           ./gradlew test --no-daemon
