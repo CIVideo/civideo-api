@@ -6,7 +6,8 @@ on:
 
 env:
   FULL_IMAGE_NAME: ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}
-  APPLICATION_SECRET_FILE: src/main/resources/application-secret.yml
+  APPLICATION_SECRET_FILE_PATH: src/main/resources/application-secret.yml
+  APPLE_AUTH_KEY_FILE_PATH: src/main/resources/key/AuthKey.p8
 
 jobs:
   deploy:
@@ -25,8 +26,11 @@ jobs:
 
       - name: Build image and push to docker hub
         run: |
-          cat << EOF >> ${{ env.APPLICATION_SECRET_FILE }}
+          cat << EOF >> ${{ env.APPLICATION_SECRET_FILE_PATH }}
           ${{ secrets.APPLICATION_SECRET }}
+          EOF
+          cat << EOF >> ${{ env.APPLE_AUTH_KEY_FILE_PATH }}
+          ${{ secrets.APPLE_AUTH_KEY }}
           EOF
           SPRING_PROFILES_ACTIVE=dev ./gradlew clean build --warning-mode=all --stacktrace --no-daemon
           docker build -t ${{ env.FULL_IMAGE_NAME }} .
