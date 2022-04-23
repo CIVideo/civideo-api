@@ -33,6 +33,7 @@ jobs:
           cat << EOF >> ${{ env.APPLICATION_SECRET_FILE_PATH }}
           ${{ secrets.APPLICATION_SECRET }}
           EOF
+          mkdir src/main/resources/key
           cat << EOF >> ${{ env.APPLE_AUTH_KEY_FILE_PATH }}
           ${{ secrets.APPLE_AUTH_KEY }}
           EOF
