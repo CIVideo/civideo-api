@@ -12,7 +12,6 @@ import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
@@ -25,20 +24,17 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BadRequestResponseDto handle400(BindException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return BadRequestResponseDto.of(e);
     }
 
     @ExceptionHandler(NotFoundDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public NotFoundDataResponseDto handle400(NotFoundDataException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return NotFoundDataResponseDto.of(e);
     }
 
@@ -50,35 +46,30 @@ public class GlobalExceptionHandler {
     })
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public UnauthorizedResponseDto handle401(Exception e) {
-        log.error(e.getClass().getSimpleName(), e);
         return UnauthorizedResponseDto.of(e);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public NotFoundResponseDto handle404(NoHandlerFoundException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return NotFoundResponseDto.of(e);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public MethodNotAllowedResponseDto handle405(HttpRequestMethodNotSupportedException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return MethodNotAllowedResponseDto.of(e);
     }
 
     @ExceptionHandler(ConflictDataException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ConflictResponseDto handle409(ConflictDataException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return ConflictResponseDto.of(e);
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public UnsupportedMediaTypeResponseDto handle415(HttpMediaTypeNotSupportedException e) {
-        log.error(e.getClass().getSimpleName(), e);
         return UnsupportedMediaTypeResponseDto.of(e);
     }
 
