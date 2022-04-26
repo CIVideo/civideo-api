@@ -12,6 +12,7 @@ import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 @RestControllerAdvice
+@EnableAspectJAutoProxy
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
