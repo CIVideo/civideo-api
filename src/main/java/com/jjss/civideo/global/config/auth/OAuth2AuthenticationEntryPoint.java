@@ -14,17 +14,17 @@ import java.io.IOException;
 @Component
 public class OAuth2AuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 
-        response.getWriter().write(
-                new ObjectMapper()
-                        .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-                        .writeValueAsString(UnauthorizedResponseDto.of(authException))
-        );
-    }
+		response.getWriter().write(
+			new ObjectMapper()
+				.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+				.writeValueAsString(UnauthorizedResponseDto.of(authException))
+		);
+	}
 
 }

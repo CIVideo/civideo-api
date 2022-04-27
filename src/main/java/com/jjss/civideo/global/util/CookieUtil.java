@@ -11,62 +11,62 @@ import java.util.Optional;
 
 public final class CookieUtil {
 
-    private CookieUtil() {
-    }
+	private CookieUtil() {
+	}
 
-    public static Optional<Cookie> getCookie(HttpServletRequest req, String cookieName) {
-        Cookie[] cookies = req.getCookies();
-        if (isEmpty(cookies) || cookieName.isEmpty()) {
-            return Optional.empty();
-        }
+	public static Optional<Cookie> getCookie(HttpServletRequest req, String cookieName) {
+		Cookie[] cookies = req.getCookies();
+		if (isEmpty(cookies) || cookieName.isEmpty()) {
+			return Optional.empty();
+		}
 
-        return find(cookies, cookieName);
-    }
+		return find(cookies, cookieName);
+	}
 
-    public static void addCookie(HttpServletResponse res, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        res.addCookie(cookie);
-    }
+	public static void addCookie(HttpServletResponse res, String name, String value, int maxAge) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setPath("/");
+		cookie.setMaxAge(maxAge);
+		res.addCookie(cookie);
+	}
 
-    public static void removeCookie(HttpServletRequest req, HttpServletResponse res, @NotNull String cookieName) {
-        Cookie[] cookies = req.getCookies();
-        if (isEmpty(cookies)) {
-            return;
-        }
-        findAndRemove(res, cookies, cookieName);
-    }
+	public static void removeCookie(HttpServletRequest req, HttpServletResponse res, @NotNull String cookieName) {
+		Cookie[] cookies = req.getCookies();
+		if (isEmpty(cookies)) {
+			return;
+		}
+		findAndRemove(res, cookies, cookieName);
+	}
 
-    public static String serialize(Object object) {
-        return Base64.getUrlEncoder().encodeToString(SerializationUtils.serialize(object));
-    }
+	public static String serialize(Object object) {
+		return Base64.getUrlEncoder().encodeToString(SerializationUtils.serialize(object));
+	}
 
-    public static <T> T deserialize(Cookie cookie, Class<T> clazz) {
-        return clazz.cast(SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
-    }
+	public static <T> T deserialize(Cookie cookie, Class<T> clazz) {
+		return clazz.cast(SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
+	}
 
-    private static boolean isEmpty(Cookie[] cookies) {
-        return cookies == null || cookies.length == 0;
-    }
+	private static boolean isEmpty(Cookie[] cookies) {
+		return cookies == null || cookies.length == 0;
+	}
 
-    private static Optional<Cookie> find(Cookie[] cookies, String cookieName) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(cookieName)) {
-                return Optional.of(cookie);
-            }
-        }
+	private static Optional<Cookie> find(Cookie[] cookies, String cookieName) {
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals(cookieName)) {
+				return Optional.of(cookie);
+			}
+		}
 
-        return Optional.empty();
-    }
+		return Optional.empty();
+	}
 
-    private static void findAndRemove(HttpServletResponse res, Cookie[] cookies, String cookieName) {
-        find(cookies, cookieName).ifPresent((cookie) -> {
-            cookie.setValue("");
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
-            res.addCookie(cookie);
-        });
-    }
+	private static void findAndRemove(HttpServletResponse res, Cookie[] cookies, String cookieName) {
+		find(cookies, cookieName).ifPresent((cookie) -> {
+			cookie.setValue("");
+			cookie.setPath("/");
+			cookie.setMaxAge(0);
+			res.addCookie(cookie);
+		});
+	}
 
 }

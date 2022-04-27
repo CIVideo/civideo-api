@@ -14,11 +14,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.security.Principal;
-import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -35,44 +30,45 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = CoupleController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 class CoupleControllerTests extends BaseControllerTest {
 
-    @MockBean
-    CoupleService coupleService;
+	@MockBean
+	CoupleService coupleService;
 
-    @Test
-    @DisplayName("[POST /couple/match] 정상 호출 시 200 return")
-    public void match_whenSendRightValue_then200() throws Exception {
-        String code = "VavL3kO8vj";
+	@Test
+	@DisplayName("[POST /couple/match] 정상 호출 시 200 return")
+	public void match_whenSendRightValue_then200() throws Exception {
+		String myCode = "eZ9QqNbgjI";
+		String yourCode = "VavL3kO8vj";
 
-        Principal principal = new UsernamePasswordAuthenticationToken(1L, "", Set.of(new SimpleGrantedAuthority("USER")));
+		CoupleMatchRequestDto coupleMatchRequestDto = new CoupleMatchRequestDto();
+		coupleMatchRequestDto.setMyCode(myCode);
+		coupleMatchRequestDto.setYourCode(yourCode);
 
-        CoupleMatchRequestDto coupleMatchRequestDto = new CoupleMatchRequestDto();
-        coupleMatchRequestDto.setTargetCode(code);
+		given(coupleService.matchCouple(myCode, yourCode)).willReturn(1L);
 
-        given(coupleService.matchCouple(1L, code)).willReturn(1L);
-
-        mockMvc.perform(post("/couple/match")
-                        .principal(principal)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coupleMatchRequestDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.couple_id").exists())
-                .andDo(document("couple/match",
-                                requestHeaders(
-                                        headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
-                                ),
-                                requestFields(
-                                        fieldWithPath("target_code").description("상대의 개인 코드")
-                                ),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
-                                ),
-                                responseFields(
-                                        fieldWithPath("couple_id").type(JsonFieldType.NUMBER).description("매치된 couple 식별 값")
-                                )
-                        )
-                );
-    }
+		mockMvc.perform(post("/couple/match")
+				.principal(getAuthorizedPrincipal())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(coupleMatchRequestDto)))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.couple_id").exists())
+			.andDo(document("couple/match",
+					requestHeaders(
+						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
+						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
+					),
+					requestFields(
+						fieldWithPath("my_code").description("나의 개인 코드"),
+						fieldWithPath("your_code").description("상대의 개인 코드")
+					),
+					responseHeaders(
+						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
+					),
+					responseFields(
+						fieldWithPath("couple_id").type(JsonFieldType.NUMBER).description("매치된 couple 식별 값")
+					)
+				)
+			);
+	}
 
 }

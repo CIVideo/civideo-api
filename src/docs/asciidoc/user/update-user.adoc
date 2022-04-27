@@ -1,0 +1,40 @@
+= Update User (patch)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:hardbreaks-option:
+
+User의 updatable 항목들을 body에 담아 보내면 값 검증 후 update를 수행합니다.
+update가 성공적으로 완료되면 `204 No Content` 를 return 합니다.
+patch update이므로 update를 수행하지 않을 값은 담아 보내지 않습니다.
+
+[[request]]
+== Request
+
+include::{snippets}/user/update-user/curl-request.adoc[]
+include::{snippets}/user/update-user/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/user/update-user/request-headers.adoc[]
+
+=== Path Parameters
+
+include::{snippets}/user/update-user/path-parameters.adoc[]
+
+=== Request Body
+
+include::{snippets}/user/update-user/request-body.adoc[]
+include::{snippets}/user/update-user/request-fields.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/user/update-user/http-response.adoc[]
+
+=== Response Body
+
+include::{snippets}/user/update-user/response-body.adoc[]

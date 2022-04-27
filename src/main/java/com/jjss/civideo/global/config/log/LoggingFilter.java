@@ -19,69 +19,69 @@ import java.util.Map;
 @Slf4j
 public class LoggingFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
-        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        filterChain.doFilter(requestWrapper, responseWrapper);
-        stopWatch.stop();
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		filterChain.doFilter(requestWrapper, responseWrapper);
+		stopWatch.stop();
 
-        response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 
-        log.info("[{} {}]\n" +
-                        "HTTP Status Code: {}\n" +
-                        "Time: {} sec\n" +
-                        "Headers: {}\n" +
-                        "Request: {}\n" +
-                        "Response: {}\n",
-                request.getMethod(),
-                request.getRequestURI(),
-                responseWrapper.getStatus(),
-                stopWatch.getTotalTimeSeconds(),
-                getHeaders(request),
-                getRequestBody(requestWrapper),
-                getResponseBody(responseWrapper));
-    }
+		log.info("[{} {}]\n" +
+				"HTTP Status Code: {}\n" +
+				"Time: {} sec\n" +
+				"Headers: {}\n" +
+				"Request: {}\n" +
+				"Response: {}\n",
+			request.getMethod(),
+			request.getRequestURI(),
+			responseWrapper.getStatus(),
+			stopWatch.getTotalTimeSeconds(),
+			getHeaders(request),
+			getRequestBody(requestWrapper),
+			getResponseBody(responseWrapper));
+	}
 
-    private Map<String, Object> getHeaders(HttpServletRequest request) {
-        Map<String, Object> headerMap = new HashMap<>();
-        Enumeration<String> headerArray = request.getHeaderNames();
-        while (headerArray.hasMoreElements()) {
-            String headerName = headerArray.nextElement();
-            headerMap.put(headerName, request.getHeader(headerName));
-        }
+	private Map<String, Object> getHeaders(HttpServletRequest request) {
+		Map<String, Object> headerMap = new HashMap<>();
+		Enumeration<String> headerArray = request.getHeaderNames();
+		while (headerArray.hasMoreElements()) {
+			String headerName = headerArray.nextElement();
+			headerMap.put(headerName, request.getHeader(headerName));
+		}
 
-        return headerMap;
-    }
+		return headerMap;
+	}
 
-    private String getRequestBody(ContentCachingRequestWrapper request) {
-        if (request != null) {
-            byte[] buf = request.getContentAsByteArray();
-            if (buf.length > 0) {
-                try {
-                    return new String(buf, 0, buf.length, request.getCharacterEncoding());
-                } catch (UnsupportedEncodingException ignored) {
-                }
-            }
-        }
+	private String getRequestBody(ContentCachingRequestWrapper request) {
+		if (request != null) {
+			byte[] buf = request.getContentAsByteArray();
+			if (buf.length > 0) {
+				try {
+					return new String(buf, 0, buf.length, request.getCharacterEncoding());
+				} catch (UnsupportedEncodingException ignored) {
+				}
+			}
+		}
 
-        return "[]";
-    }
+		return "[]";
+	}
 
-    private String getResponseBody(ContentCachingResponseWrapper response) throws IOException {
-        String payload = null;
-        if (response != null) {
-            byte[] buf = response.getContentAsByteArray();
-            if (buf.length > 0) {
-                payload = new String(buf, 0, buf.length, response.getCharacterEncoding());
-                response.copyBodyToResponse();
-            }
-        }
+	private String getResponseBody(ContentCachingResponseWrapper response) throws IOException {
+		String payload = null;
+		if (response != null) {
+			byte[] buf = response.getContentAsByteArray();
+			if (buf.length > 0) {
+				payload = new String(buf, 0, buf.length, response.getCharacterEncoding());
+				response.copyBodyToResponse();
+			}
+		}
 
-        return payload == null ? "[]" : payload;
-    }
+		return payload == null ? "[]" : payload;
+	}
 
 }

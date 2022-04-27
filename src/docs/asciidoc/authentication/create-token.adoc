@@ -5,6 +5,7 @@
 :toc: left
 :toclevels: 4
 :sectlinks:
+:hardbreaks-option:
 
 provider와 provider에서 제공한 access token을 담아 호출하면 검증 후 Server의 API에 access가 가능한 access token과 random generated code를 발급합니다.
 

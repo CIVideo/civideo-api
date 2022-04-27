@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    Optional<User> findByProviderId(String providerId);
+	Optional<User> findByProviderId(String providerId);
 
-    Optional<User> findByCode(String code);
+	Optional<User> findByCode(String code);
 
 }

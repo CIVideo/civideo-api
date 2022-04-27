@@ -5,6 +5,7 @@
 :toc: left
 :toclevels: 4
 :sectlinks:
+:hardbreaks-option:
 
 아직 만료되지 않은 refresh token을 담아 호출하면 검증 후 새 access token과 refresh token을 반환합니다.
 

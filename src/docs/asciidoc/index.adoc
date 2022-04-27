@@ -5,6 +5,7 @@
 :toc: left
 :toclevels: 4
 :sectlinks:
+:hardbreaks-option:
 
 [[overview]]
 = 개요
@@ -97,3 +98,8 @@
 === Couple
 
 ==== link:./couple/match.html[`[POST /auth/refresh\] 커플 매칭`]
+
+[[user]]
+=== User
+
+==== link:./user/update-user.html[`[PATCH /user/\{id\}\] Update User Info`]

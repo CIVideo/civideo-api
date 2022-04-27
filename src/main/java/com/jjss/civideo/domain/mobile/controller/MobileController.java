@@ -14,9 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MobileController {
 
-    @GetMapping("/tapbar")
-    public ResponseEntity<List<String>> tapBar(String version) {
-        return ResponseEntity.ok(List.of("알림", "My"));
-    }
+	@GetMapping("/tapbar")
+	public ResponseEntity<List<String>> tapBar(String version) {
+		return ResponseEntity.ok(List.of("알림", "My"));
+	}
 
 }

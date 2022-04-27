@@ -20,16 +20,16 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Couple extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COUPLE_SEQ_GENERATOR")
-    @Column(name = "couple_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COUPLE_SEQ_GENERATOR")
+	@Column(name = "couple_id")
+	private Long id;
 
-    private LocalDate beginDate;
+	private LocalDate beginDate;
 
-    @Builder
-    private Couple(LocalDate beginDate) {
-        this.beginDate = beginDate;
-    }
+	@Builder
+	private Couple(LocalDate beginDate) {
+		this.beginDate = beginDate;
+	}
 
 }

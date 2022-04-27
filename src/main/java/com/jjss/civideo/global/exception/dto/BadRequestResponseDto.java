@@ -16,19 +16,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class BadRequestResponseDto {
 
-    private final List<Map<String, String>> errors;
+	private final List<Map<String, String>> errors;
 
-    public static BadRequestResponseDto of(BindException exception) {
-        return new BadRequestResponseDto(toList(exception.getBindingResult()));
-    }
+	public static BadRequestResponseDto of(BindException exception) {
+		return new BadRequestResponseDto(toList(exception.getBindingResult()));
+	}
 
-    private static List<Map<String, String>> toList(Errors errors) {
-        return errors.getFieldErrors()
-                .stream()
-                .map(error -> Map.of(
-                        "field", CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, error.getField()),
-                        "message", Objects.requireNonNull(error.getDefaultMessage())))
-                .collect(Collectors.toList());
-    }
+	private static List<Map<String, String>> toList(Errors errors) {
+		return errors.getFieldErrors()
+			.stream()
+			.map(error -> Map.of(
+				"field", CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, error.getField()),
+				"message", Objects.requireNonNull(error.getDefaultMessage())))
+			.collect(Collectors.toList());
+	}
 
 }
