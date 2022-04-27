@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class CoupleMatchResponseDto {
 
-    private final Long coupleId;
+	private final Long coupleId;
 
 }

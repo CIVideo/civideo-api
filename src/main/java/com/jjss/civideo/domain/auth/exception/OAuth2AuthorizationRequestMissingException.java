@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.user.exception;
+package com.jjss.civideo.domain.auth.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthorizationRequestMissingException extends RuntimeException {
 
-    private final String requestURL;
+	private final String requestURL;
 
 }

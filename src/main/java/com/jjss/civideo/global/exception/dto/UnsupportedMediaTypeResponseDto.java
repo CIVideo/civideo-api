@@ -12,11 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnsupportedMediaTypeResponseDto {
 
-    private final List<MediaType> supportedMediaTypes;
-    private final String message;
+	private final List<MediaType> supportedMediaTypes;
+	private final String message;
 
-    public static UnsupportedMediaTypeResponseDto of(HttpMediaTypeNotSupportedException exception) {
-        return new UnsupportedMediaTypeResponseDto(exception.getSupportedMediaTypes(), exception.getMessage());
-    }
+	public static UnsupportedMediaTypeResponseDto of(HttpMediaTypeNotSupportedException exception) {
+		return new UnsupportedMediaTypeResponseDto(exception.getSupportedMediaTypes(), exception.getMessage());
+	}
 
 }

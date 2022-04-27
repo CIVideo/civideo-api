@@ -9,14 +9,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnauthorizedResponseDto {
 
-    private final String message;
+	private final String message;
 
-    public static UnauthorizedResponseDto of(Exception exception) {
-        return new UnauthorizedResponseDto(
-                UnauthorizedType.valueOf(
-                        CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, exception.getClass().getSimpleName())
-                ).getMessage()
-        );
-    }
+	public static UnauthorizedResponseDto of(Exception exception) {
+		return new UnauthorizedResponseDto(
+			UnauthorizedType.valueOf(
+				CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, exception.getClass().getSimpleName())
+			).getMessage()
+		);
+	}
 
 }

@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class NotFoundDataResponseDto {
 
-    private final String field;
-    private final Object value;
-    private final String message;
+	private final String field;
+	private final Object value;
+	private final String message;
 
-    public static NotFoundDataResponseDto of(NotFoundDataException exception) {
-        return new NotFoundDataResponseDto(exception.getField(), exception.getValue(), exception.getMessage());
-    }
+	public static NotFoundDataResponseDto of(NotFoundDataException exception) {
+		return new NotFoundDataResponseDto(exception.getField(), exception.getValue(), exception.getMessage());
+	}
 
 }

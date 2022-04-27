@@ -5,6 +5,7 @@
 :toc: left
 :toclevels: 4
 :sectlinks:
+:hardbreaks-option:
 
 입력받은 상대의 code를 담아 호출하면 커플 매칭 업데이트 후 생성된 커플 데이터에 대한 식별 값을 return 합니다.
 

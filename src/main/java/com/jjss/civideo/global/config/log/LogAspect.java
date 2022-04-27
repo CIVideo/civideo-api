@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogAspect {
 
-    @Before("execution(* com.jjss.civideo.global.exception.config.GlobalExceptionHandler.*(*))")
-    public void before(JoinPoint joinPoint) {
-        Exception exception = (Exception) joinPoint.getArgs()[0];
-        log.error(exception.getClass().getSimpleName(), exception);
-    }
+	@Before("execution(* com.jjss.civideo.global.exception.config.GlobalExceptionHandler.*(*))")
+	public void before(JoinPoint joinPoint) {
+		Exception exception = (Exception) joinPoint.getArgs()[0];
+		log.error(exception.getClass().getSimpleName(), exception);
+	}
 
 }

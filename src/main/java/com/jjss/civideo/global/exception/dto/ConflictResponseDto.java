@@ -10,12 +10,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConflictResponseDto {
 
-    private final String field;
-    private final Object value;
-    private final String message;
+	private final String field;
+	private final Object value;
+	private final String message;
 
-    public static ConflictResponseDto of(ConflictDataException exception) {
-        return new ConflictResponseDto(exception.getField(), exception.getValue(), exception.getMessage());
-    }
+	public static ConflictResponseDto of(ConflictDataException exception) {
+		return new ConflictResponseDto(exception.getField(), exception.getValue(), exception.getMessage());
+	}
 
 }

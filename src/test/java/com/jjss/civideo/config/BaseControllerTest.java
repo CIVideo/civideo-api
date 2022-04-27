@@ -10,9 +10,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.security.Principal;
+import java.util.Set;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -22,23 +27,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Disabled
-public class BaseControllerTest {
+public abstract class BaseControllerTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+	@Autowired
+	protected ObjectMapper objectMapper;
 
-    @BeforeEach
-    public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .alwaysDo(print())
-                .apply(documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
-                .build();
-    }
+	@BeforeEach
+	public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+			.alwaysDo(print())
+			.apply(documentationConfiguration(restDocumentation)
+				.operationPreprocessors()
+				.withRequestDefaults(prettyPrint())
+				.withResponseDefaults(prettyPrint()))
+			.build();
+	}
+
+	public Principal getAuthorizedPrincipal() {
+		return new UsernamePasswordAuthenticationToken(1L, "", Set.of(new SimpleGrantedAuthority("USER")));
+	}
 
 }

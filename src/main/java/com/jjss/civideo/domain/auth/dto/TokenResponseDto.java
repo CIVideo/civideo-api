@@ -1,4 +1,4 @@
-package com.jjss.civideo.domain.user.dto;
+package com.jjss.civideo.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TokenResponseDto {
 
-    private final String accessToken;
+	private final String accessToken;
 
-    private final String refreshToken;
+	private final String refreshToken;
 
-    private final String code;
+	private final String code;
 
 }
