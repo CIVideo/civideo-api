@@ -1,11 +1,13 @@
-package com.jjss.civideo.domain.user.controller;
+package com.jjss.civideo.domain.user;
 
 import com.jjss.civideo.domain.user.dto.UserRequestDto;
+import com.jjss.civideo.domain.user.dto.UserResponseDto;
 import com.jjss.civideo.domain.user.service.UserService;
 import com.jjss.civideo.global.exception.NotFoundDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,12 @@ import javax.validation.Valid;
 public class UserController {
 
 	private final UserService userService;
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<?> getUser(@PathVariable Long id) throws NotFoundDataException {
+		UserResponseDto userResponseDto = userService.getUser(id);
+		return ResponseEntity.ok(userResponseDto);
+	}
 
 	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto) throws NotFoundDataException {

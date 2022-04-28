@@ -31,10 +31,9 @@ public class MobileControllerTests extends BaseControllerTest {
 	@DisplayName("[GET /ui/tapbar] 정상 호출 시 200 return")
 	public void tapBar_whenSendRightValue_then200() throws Exception {
 		String version = "1.0.0";
-		String accessToken = "access-token";
 
 		mockMvc.perform(get("/ui/tapbar")
-				.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+				.header(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")
 				.accept(MediaType.APPLICATION_JSON)
 				.param("version", version))
 			.andExpect(status().isOk())
