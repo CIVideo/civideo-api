@@ -1,0 +1,39 @@
+= User 조회
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:hardbreaks-option:
+
+[[request]]
+== Request
+
+include::{snippets}/user/get-user/curl-request.adoc[]
+include::{snippets}/user/get-user/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/user/get-user/request-headers.adoc[]
+
+=== Path Parameters
+
+include::{snippets}/user/get-user/path-parameters.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/user/get-user/http-response.adoc[]
+
+=== Response Headers
+
+include::{snippets}/user/get-user/response-headers.adoc[]
+
+=== Response Fields
+
+include::{snippets}/user/get-user/response-fields.adoc[]
+
+=== Response Body
+
+include::{snippets}/user/get-user/response-body.adoc[]

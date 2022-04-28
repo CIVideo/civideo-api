@@ -1,6 +1,7 @@
 package com.jjss.civideo.domain.user.entity;
 
 import com.jjss.civideo.domain.couple.entity.Couple;
+import com.jjss.civideo.domain.user.dto.UserResponseDto;
 import com.jjss.civideo.global.config.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -71,6 +72,19 @@ public class User extends BaseEntity {
 		this.providerId = providerId;
 		this.provider = provider;
 		this.code = createCode();
+	}
+
+	public UserResponseDto toUserResponseDto() {
+		return UserResponseDto.builder()
+			.id(id)
+			.birthDate(birthDate)
+			.bloodType(bloodType)
+			.code(code)
+			.nickname(nickname)
+			.gender(gender)
+			.mbti(mbti)
+			.provider(provider)
+			.build();
 	}
 
 	public void match(Couple couple) {

@@ -1,6 +1,9 @@
-package com.jjss.civideo.domain.user.controller;
+package com.jjss.civideo.domain.user;
 
 import com.jjss.civideo.config.BaseControllerTest;
+import com.jjss.civideo.domain.user.dto.UserResponseDto;
+import com.jjss.civideo.domain.user.entity.BloodType;
+import com.jjss.civideo.domain.user.entity.Mbti;
 import com.jjss.civideo.domain.user.entity.Provider;
 import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
@@ -18,15 +21,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.oneOf;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,6 +50,54 @@ class UserControllerTest extends BaseControllerTest {
 	UserRepository userRepository;
 
 	@Test
+	@DisplayName("[GET /user/{id}] id 값에 해당하는 user 존재 시 return")
+	public void getUser_whenExistUser_then200() throws Exception {
+		User mockUser = User.builder()
+			.provider(Provider.GOOGLE)
+			.providerId("1175699863314647947")
+			.build();
+		mockUser.setNickname("111");
+		mockUser.setBloodType(BloodType.O);
+		mockUser.setBirthDate(LocalDate.of(2022, 4, 27));
+		mockUser.setMbti(Mbti.ENFJ);
+
+		UserResponseDto userResponseDto = mockUser.toUserResponseDto();
+		userResponseDto.setId(1L);
+		given(userService.getUser(1L)).willReturn(userResponseDto);
+
+		mockMvc.perform(get("/user/{id}", 1L)
+				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").isNumber())
+			.andExpect(jsonPath("$.code").isString())
+			.andExpect(jsonPath("$.provider").value(oneOf("GOOGLE", "KAKAO", "APPLE")))
+			.andDo(document("user/get-user",
+					requestHeaders(
+						headerWithName(HttpHeaders.AUTHORIZATION).description("access token"),
+						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값")
+					),
+					pathParameters(
+						parameterWithName("id").description("User 식별값 (ID)")
+					),
+					responseHeaders(
+						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
+					),
+					responseFields(
+						fieldWithPath("id").type(JsonFieldType.NUMBER).description("User 식별 값"),
+						fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임").optional(),
+						fieldWithPath("gender").type(JsonFieldType.STRING).description("성별").optional(),
+						fieldWithPath("birth_date").type(JsonFieldType.STRING).description("생일").optional(),
+						fieldWithPath("blood_type").type(JsonFieldType.STRING).description("혈액형").optional(),
+						fieldWithPath("mbti").type(JsonFieldType.STRING).description("MBTI").optional(),
+						fieldWithPath("code").type(JsonFieldType.STRING).description("개인 코드"),
+						fieldWithPath("provider").type(JsonFieldType.STRING).description("로그인 타입")
+					)
+				)
+			);
+	}
+
+	@Test
 	@DisplayName("[PATCH /user/{id}] validation을 통과하는 parameter로 호출 시 204 return")
 	public void updateUser_whenSendRightValue_then204() throws Exception {
 		JSONObject userRequestDto = new JSONObject()
@@ -55,6 +111,7 @@ class UserControllerTest extends BaseControllerTest {
 		given(userRepository.findById(1L)).willReturn(Optional.of(mockUser));
 
 		mockMvc.perform(patch("/user/{id}", 1L)
+				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userRequestDto.toString()))
@@ -62,6 +119,7 @@ class UserControllerTest extends BaseControllerTest {
 			.andExpect(jsonPath("$").doesNotExist())
 			.andDo(document("user/update-user",
 					requestHeaders(
+						headerWithName(HttpHeaders.AUTHORIZATION).description("access token"),
 						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
 						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
 					),

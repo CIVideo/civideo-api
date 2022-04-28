@@ -47,6 +47,7 @@ class CoupleControllerTests extends BaseControllerTest {
 
 		mockMvc.perform(post("/couple/match")
 				.principal(getAuthorizedPrincipal())
+				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(coupleMatchRequestDto)))
@@ -54,6 +55,7 @@ class CoupleControllerTests extends BaseControllerTest {
 			.andExpect(jsonPath("$.couple_id").exists())
 			.andDo(document("couple/match",
 					requestHeaders(
+						headerWithName(HttpHeaders.AUTHORIZATION).description("access token"),
 						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
 						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
 					),
