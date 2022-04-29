@@ -6,6 +6,7 @@ import com.jjss.civideo.domain.user.entity.BloodType;
 import com.jjss.civideo.domain.user.entity.Mbti;
 import com.jjss.civideo.domain.user.entity.User;
 import com.jjss.civideo.domain.user.repository.UserRepository;
+import com.jjss.civideo.global.exception.ForbiddenException;
 import com.jjss.civideo.global.exception.NotFoundDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,14 @@ public class UserService {
 		if (nickname != null) {
 			user.setNickname(nickname);
 		}
+	}
+
+	public void deleteUser(Long id) throws NotFoundDataException, ForbiddenException {
+		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("user_id", id, "해당 ID에 해당하는 유저를 찾을 수 없습니다."));
+		if (user.getCouple() != null) {
+			throw new ForbiddenException("커플 해제가 되어야 삭제가 가능합니다.");
+		}
+		userRepository.delete(user);
 	}
 
 }
