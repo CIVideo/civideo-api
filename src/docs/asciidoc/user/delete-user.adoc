@@ -1,0 +1,38 @@
+= User 탈퇴 (삭제)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:hardbreaks-option:
+
+회원 탈퇴를 원하는 User의 식별값을 path parameter로 넘기면 해당 유저가 존재하는지 확인 후 유저를 DB에서 삭제합니다.
+삭제에 성공하면 `204 No Content` 를 return 합니다.
+
+[[request]]
+== Request
+
+include::{snippets}/user/delete-user/curl-request.adoc[]
+include::{snippets}/user/delete-user/http-request.adoc[]
+
+=== Request Headers
+
+include::{snippets}/user/delete-user/request-headers.adoc[]
+
+=== Path Parameters
+
+include::{snippets}/user/delete-user/path-parameters.adoc[]
+
+=== Request Body
+
+include::{snippets}/user/delete-user/request-body.adoc[]
+
+[[response]]
+== Response
+
+include::{snippets}/user/delete-user/http-response.adoc[]
+
+=== Response Body
+
+include::{snippets}/user/delete-user/response-body.adoc[]

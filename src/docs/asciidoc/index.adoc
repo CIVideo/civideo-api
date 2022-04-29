@@ -102,6 +102,8 @@
 [[user]]
 === User
 
-==== link:./user/get-user.html[`[GET /user/\{id\}\] Get User Info`]
+==== link:./user/get-user.html[`[GET /user/\{id\}\] 유저 조회`]
 
-==== link:./user/update-user.html[`[PATCH /user/\{id\}\] Update User Info`]
+==== link:./user/delete-user.html[`[Delete /user/\{id\}\] 유제 탈퇴`]
+
+==== link:./user/update-user.html[`[PATCH /user/\{id\}\] 유저 정보 업데이트`]

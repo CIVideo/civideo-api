@@ -7,6 +7,8 @@
 :sectlinks:
 :hardbreaks-option:
 
+조회할 User의 식별값을 path parameter로 넘기면 해당 유저가 존재하는지 확인 후 유저의 정보를 return 합니다.
+
 [[request]]
 == Request
 
@@ -20,6 +22,10 @@ include::{snippets}/user/get-user/request-headers.adoc[]
 === Path Parameters
 
 include::{snippets}/user/get-user/path-parameters.adoc[]
+
+=== Request Body
+
+include::{snippets}/user/get-user/request-body.adoc[]
 
 [[response]]
 == Response

@@ -30,6 +30,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -50,7 +51,7 @@ class UserControllerTest extends BaseControllerTest {
 	UserRepository userRepository;
 
 	@Test
-	@DisplayName("[GET /user/{id}] id 값에 해당하는 user 존재 시 return")
+	@DisplayName("[GET /user/{id}] id 값에 해당하는 user 존재 시 200 return")
 	public void getUser_whenExistUser_then200() throws Exception {
 		User mockUser = User.builder()
 			.provider(Provider.GOOGLE)
@@ -66,16 +67,14 @@ class UserControllerTest extends BaseControllerTest {
 		given(userService.getUser(1L)).willReturn(userResponseDto);
 
 		mockMvc.perform(get("/user/{id}", 1L)
-				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}")
-				.accept(MediaType.APPLICATION_JSON))
+				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id").isNumber())
 			.andExpect(jsonPath("$.code").isString())
 			.andExpect(jsonPath("$.provider").value(oneOf("GOOGLE", "KAKAO", "APPLE")))
 			.andDo(document("user/get-user",
 					requestHeaders(
-						headerWithName(HttpHeaders.AUTHORIZATION).description("access token"),
-						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값")
+						headerWithName(HttpHeaders.AUTHORIZATION).description("access token")
 					),
 					pathParameters(
 						parameterWithName("id").description("User 식별값 (ID)")
@@ -98,7 +97,25 @@ class UserControllerTest extends BaseControllerTest {
 	}
 
 	@Test
-	@DisplayName("[PATCH /user/{id}] validation을 통과하는 parameter로 호출 시 204 return")
+	@DisplayName("[DELETE /user/{id}] id 값에 해당하는 user 존재 시 해당 user 삭제 후 204 return")
+	public void deleteUser_whenSendRightValue_then204() throws Exception {
+		mockMvc.perform(delete("/user/{id}", 1L)
+				.header(HttpHeaders.AUTHORIZATION, "Bearer ${access_token}"))
+			.andExpect(status().isNoContent())
+			.andExpect(jsonPath("$").doesNotExist())
+			.andDo(document("user/delete-user",
+					requestHeaders(
+						headerWithName(HttpHeaders.AUTHORIZATION).description("access token")
+					),
+					pathParameters(
+						parameterWithName("id").description("User 식별값 (ID)")
+					)
+				)
+			);
+	}
+
+	@Test
+	@DisplayName("[PATCH /user/{id}] validation을 통과하는 parameter로 호출 시 업데이트 후 204 return")
 	public void updateUser_whenSendRightValue_then204() throws Exception {
 		JSONObject userRequestDto = new JSONObject()
 			.put("mbti", "ENFJ")
