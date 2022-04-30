@@ -2,6 +2,7 @@ package com.jjss.civideo.domain.couple.controller;
 
 import com.jjss.civideo.domain.couple.dto.CoupleMatchRequestDto;
 import com.jjss.civideo.domain.couple.dto.CoupleMatchResponseDto;
+import com.jjss.civideo.domain.couple.exception.SameUserException;
 import com.jjss.civideo.domain.couple.service.CoupleService;
 import com.jjss.civideo.global.exception.ConflictDataException;
 import com.jjss.civideo.global.exception.ForbiddenException;
@@ -25,9 +26,12 @@ public class CoupleController {
 	private final CoupleService coupleService;
 
 	@PostMapping(value = "/match", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> matchCouple(@Valid @RequestBody CoupleMatchRequestDto coupleMatchRequestDto) throws NotFoundDataException, ConflictDataException, ForbiddenException {
+	public ResponseEntity<?> matchCouple(@Valid @RequestBody CoupleMatchRequestDto coupleMatchRequestDto) throws NotFoundDataException, ConflictDataException, ForbiddenException, SameUserException {
 		String myCode = coupleMatchRequestDto.getMyCode();
 		String yourCode = coupleMatchRequestDto.getYourCode();
+		if (myCode.equals(yourCode)) {
+			throw new SameUserException("같은 code로 커플 매치할 수 없습니다.");
+		}
 
 		Long coupleId = coupleService.matchCouple(myCode, yourCode);
 

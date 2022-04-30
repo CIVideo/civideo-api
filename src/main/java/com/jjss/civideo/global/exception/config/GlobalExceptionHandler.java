@@ -1,6 +1,7 @@
 package com.jjss.civideo.global.exception.config;
 
 import com.jjss.civideo.domain.auth.exception.OAuth2AuthorizationRequestMissingException;
+import com.jjss.civideo.domain.couple.exception.SameUserException;
 import com.jjss.civideo.global.exception.ConflictDataException;
 import com.jjss.civideo.global.exception.ForbiddenException;
 import com.jjss.civideo.global.exception.NotFoundDataException;
@@ -10,6 +11,7 @@ import com.jjss.civideo.global.exception.dto.ForbiddenResponseDto;
 import com.jjss.civideo.global.exception.dto.MethodNotAllowedResponseDto;
 import com.jjss.civideo.global.exception.dto.NotFoundDataResponseDto;
 import com.jjss.civideo.global.exception.dto.NotFoundResponseDto;
+import com.jjss.civideo.global.exception.dto.SameUserResponseDto;
 import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -40,6 +42,12 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public NotFoundDataResponseDto handle400(NotFoundDataException e) {
 		return NotFoundDataResponseDto.of(e);
+	}
+
+	@ExceptionHandler(SameUserException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public SameUserResponseDto handle400(SameUserException e) {
+		return SameUserResponseDto.of(e);
 	}
 
 	@ExceptionHandler({
