@@ -26,7 +26,10 @@ public class CoupleController {
 
 	@PostMapping(value = "/match", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> matchCouple(@Valid @RequestBody CoupleMatchRequestDto coupleMatchRequestDto) throws NotFoundDataException, ConflictDataException, ForbiddenException {
-		Long coupleId = coupleService.matchCouple(coupleMatchRequestDto.getMyCode(), coupleMatchRequestDto.getYourCode());
+		String myCode = coupleMatchRequestDto.getMyCode();
+		String yourCode = coupleMatchRequestDto.getYourCode();
+
+		Long coupleId = coupleService.matchCouple(myCode, yourCode);
 
 		CoupleMatchResponseDto coupleMatchResponseDto = CoupleMatchResponseDto.builder()
 			.coupleId(coupleId)
