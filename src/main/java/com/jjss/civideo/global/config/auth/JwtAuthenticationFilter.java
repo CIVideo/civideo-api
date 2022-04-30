@@ -6,6 +6,7 @@ import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
 import com.jjss.civideo.global.util.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +26,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		String token = getToken(request);
-		try {
-			Authentication authentication = JwtProvider.authenticate(token);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		if (request.getRequestURI().contains("/auth")) {
 			filterChain.doFilter(request, response);
-		} catch (SignatureException | ExpiredJwtException | MalformedJwtException | IllegalArgumentException e) {
-			handleUnauthorized(response, e);
+		} else {
+			try {
+				Authentication authentication = JwtProvider.authenticate(token);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				filterChain.doFilter(request, response);
+			} catch (SignatureException
+			         | ExpiredJwtException
+			         | MalformedJwtException
+			         | IllegalArgumentException
+			         | UnsupportedJwtException e) {
+				handleUnauthorized(response, e);
+			}
 		}
 
 	}
@@ -45,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void handleUnauthorized(HttpServletResponse response, Exception e) throws IOException {
-		logger.info("JWT Token authenticate exception in " + this.getClass().getSimpleName(), e);
+		log.info("JWT Token authenticate exception in " + this.getClass().getSimpleName(), e);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

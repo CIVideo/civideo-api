@@ -21,8 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private final String[] ignoringMatchers = {"/favicon.ico", "/auth/**", "/error/**", "/docs/**"};
-	private final String[] permitAllMatchers = {"/oauth2/**"};
+	private final String[] ignoringMatchers = {"/favicon.ico", "/error/**", "/docs/**"};
+	private final String[] permitAllMatchers = {"/oauth2/**", "/auth/**"};
 
 	private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 	private final CustomOAuth2UserService customOAuth2UserService;
