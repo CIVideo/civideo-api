@@ -29,12 +29,12 @@ public class CoupleService {
 
 		User you = userRepository.findByCode(yourCode).orElseThrow(() -> new NotFoundDataException("target_code", yourCode, "해당 code에 해당하는 유저를 찾을 수 없습니다."));
 
-		if (me.getCouple() != null) {
-			throw new ConflictDataException("my_code", myCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
-		}
-		if (you.getCouple() != null) {
-			throw new ConflictDataException("target_code", yourCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
-		}
+//		if (me.getCouple() != null) {
+//			throw new ConflictDataException("my_code", myCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
+//		}
+//		if (you.getCouple() != null) {
+//			throw new ConflictDataException("target_code", yourCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
+//		}
 
 		Couple couple = Couple.builder()
 			.build();
