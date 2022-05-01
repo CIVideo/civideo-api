@@ -8,8 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ConflictDataException extends Exception {
 
-	private final String field;
-	private final Object value;
 	private final String message;
 
 }

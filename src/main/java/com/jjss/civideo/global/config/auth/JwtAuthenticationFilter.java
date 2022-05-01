@@ -2,7 +2,7 @@ package com.jjss.civideo.global.config.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
+import com.jjss.civideo.global.exception.dto.ErrorResponseDto;
 import com.jjss.civideo.global.util.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-		response.getWriter().write(new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).writeValueAsString(UnauthorizedResponseDto.of(e)));
+		response.getWriter().write(new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).writeValueAsString(new ErrorResponseDto(e)));
 	}
 
 }

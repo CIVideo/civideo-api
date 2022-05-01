@@ -2,7 +2,7 @@ package com.jjss.civideo.global.config.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
+import com.jjss.civideo.global.exception.dto.ErrorResponseDto;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class OAuth2AuthenticationEntryPoint implements AuthenticationEntryPoint 
 		response.getWriter().write(
 			new ObjectMapper()
 				.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-				.writeValueAsString(UnauthorizedResponseDto.of(authException))
+				.writeValueAsString(new ErrorResponseDto(authException))
 		);
 	}
 
