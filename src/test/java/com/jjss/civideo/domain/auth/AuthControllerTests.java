@@ -91,7 +91,7 @@ public class AuthControllerTests extends BaseControllerTest {
 	public void sendToken_whenSendNotValidValue_then400() throws Exception {
 		String provider = "??";
 		String token = "idontknow";
-
+		
 		TokenRequestDto tokenRequestDto = new TokenRequestDto();
 		tokenRequestDto.setProvider(provider);
 		tokenRequestDto.setToken(token);
@@ -101,10 +101,7 @@ public class AuthControllerTests extends BaseControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(tokenRequestDto)))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errors").isArray())
-			.andExpect(jsonPath("$.errors").isNotEmpty())
-			.andExpect(jsonPath("$.errors[*].field").exists())
-			.andExpect(jsonPath("$.errors[*].message").exists())
+			.andExpect(jsonPath("$.message").isString())
 			.andDo(document("error/bad-request",
 					requestHeaders(
 						headerWithName(HttpHeaders.ACCEPT).description("application/json을 포함하는 값"),
@@ -118,9 +115,7 @@ public class AuthControllerTests extends BaseControllerTest {
 						headerWithName(HttpHeaders.CONTENT_TYPE).description("application/json 고정")
 					),
 					responseFields(
-						fieldWithPath("errors").type(JsonFieldType.ARRAY).description("An array of field errors"),
-						fieldWithPath("errors[].field").type(JsonFieldType.STRING).description("error field"),
-						fieldWithPath("errors[].message").type(JsonFieldType.STRING).description("error description")
+						fieldWithPath("message").type(JsonFieldType.STRING).description("error description")
 					)
 				)
 			);
