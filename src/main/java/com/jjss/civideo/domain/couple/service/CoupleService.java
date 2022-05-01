@@ -21,19 +21,19 @@ public class CoupleService {
 	private final CoupleRepository coupleRepository;
 
 	public Long matchCouple(String myCode, String yourCode) throws NotFoundDataException, ConflictDataException, ForbiddenException {
-		User me = userRepository.findByCode(myCode).orElseThrow(() -> new NotFoundDataException("user_id", myCode, "해당 code에 해당하는 유저를 찾을 수 없습니다."));
+		User me = userRepository.findByCode(myCode).orElseThrow(() -> new NotFoundDataException("해당 code에 해당하는 유저를 찾을 수 없습니다."));
 		Long authenticatedUserId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!me.getId().equals(authenticatedUserId)) {
 			throw new ForbiddenException("해당 code를 가진 유저를 update할 권한이 없습니다.");
 		}
 
-		User you = userRepository.findByCode(yourCode).orElseThrow(() -> new NotFoundDataException("target_code", yourCode, "해당 code에 해당하는 유저를 찾을 수 없습니다."));
+		User you = userRepository.findByCode(yourCode).orElseThrow(() -> new NotFoundDataException("해당 code에 해당하는 유저를 찾을 수 없습니다."));
 
 //		if (me.getCouple() != null) {
-//			throw new ConflictDataException("my_code", myCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
+//			throw new ConflictDataException("해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
 //		}
 //		if (you.getCouple() != null) {
-//			throw new ConflictDataException("target_code", yourCode, "해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
+//			throw new ConflictDataException("해당 code에 해당하는 유저는 이미 커플 매치가 된 유저입니다.");
 //		}
 
 		Couple couple = Couple.builder()

@@ -22,12 +22,12 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	public UserResponseDto getUser(Long id) throws NotFoundDataException {
-		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("user_id", id, "해당 ID에 해당하는 유저를 찾을 수 없습니다."));
+		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("해당 ID에 해당하는 유저를 찾을 수 없습니다."));
 		return user.toUserResponseDto();
 	}
 
 	public void updateUser(Long id, UserRequestDto userRequestDto) throws NotFoundDataException {
-		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("user_id", id, "해당 ID에 해당하는 유저를 찾을 수 없습니다."));
+		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("해당 ID에 해당하는 유저를 찾을 수 없습니다."));
 
 		String mbti = userRequestDto.getMbti();
 		if (mbti != null) {
@@ -51,7 +51,7 @@ public class UserService {
 	}
 
 	public void deleteUser(Long id) throws NotFoundDataException, ForbiddenException {
-		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("user_id", id, "해당 ID에 해당하는 유저를 찾을 수 없습니다."));
+		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundDataException("해당 ID에 해당하는 유저를 찾을 수 없습니다."));
 		if (user.getCouple() != null) {
 			throw new ForbiddenException("커플 해제가 되어야 삭제가 가능합니다.");
 		}

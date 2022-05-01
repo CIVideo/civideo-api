@@ -5,19 +5,12 @@ import com.jjss.civideo.domain.couple.exception.SameUserException;
 import com.jjss.civideo.global.exception.ConflictDataException;
 import com.jjss.civideo.global.exception.ForbiddenException;
 import com.jjss.civideo.global.exception.NotFoundDataException;
-import com.jjss.civideo.global.exception.dto.BadRequestResponseDto;
-import com.jjss.civideo.global.exception.dto.ConflictResponseDto;
-import com.jjss.civideo.global.exception.dto.ForbiddenResponseDto;
-import com.jjss.civideo.global.exception.dto.MethodNotAllowedResponseDto;
-import com.jjss.civideo.global.exception.dto.NotFoundDataResponseDto;
-import com.jjss.civideo.global.exception.dto.NotFoundResponseDto;
-import com.jjss.civideo.global.exception.dto.SameUserResponseDto;
-import com.jjss.civideo.global.exception.dto.UnauthorizedResponseDto;
-import com.jjss.civideo.global.exception.dto.UnsupportedMediaTypeResponseDto;
+import com.jjss.civideo.global.exception.dto.ErrorResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -34,20 +27,25 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BadRequestResponseDto handle400(BindException e) {
-		return BadRequestResponseDto.of(e);
+	public ErrorResponseDto handle400(BindException e) {
+		String message = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+		return new ErrorResponseDto(message);
 	}
 
-	@ExceptionHandler(NotFoundDataException.class)
+	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public NotFoundDataResponseDto handle400(NotFoundDataException e) {
-		return NotFoundDataResponseDto.of(e);
+	public ErrorResponseDto handle400(HttpMessageNotReadableException e) {
+		return new ErrorResponseDto(e);
 	}
 
-	@ExceptionHandler(SameUserException.class)
+	@ExceptionHandler({
+		NotFoundDataException.class,
+		SameUserException.class
+	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public SameUserResponseDto handle400(SameUserException e) {
-		return SameUserResponseDto.of(e);
+	public ErrorResponseDto handle400(Exception e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 	@ExceptionHandler({
@@ -57,38 +55,43 @@ public class GlobalExceptionHandler {
 		MalformedJwtException.class
 	})
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public UnauthorizedResponseDto handle401(Exception e) {
-		return UnauthorizedResponseDto.of(e);
+	public ErrorResponseDto handle401(Exception e) {
+		return new ErrorResponseDto(e);
 	}
 
 	@ExceptionHandler(ForbiddenException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
-	public ForbiddenResponseDto handle403(ForbiddenException e) {
-		return ForbiddenResponseDto.of(e);
+	public ErrorResponseDto handle403(ForbiddenException e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public NotFoundResponseDto handle404(NoHandlerFoundException e) {
-		return NotFoundResponseDto.of(e);
+	public ErrorResponseDto handle404(NoHandlerFoundException e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-	public MethodNotAllowedResponseDto handle405(HttpRequestMethodNotSupportedException e) {
-		return MethodNotAllowedResponseDto.of(e);
+	public ErrorResponseDto handle405(HttpRequestMethodNotSupportedException e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 	@ExceptionHandler(ConflictDataException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public ConflictResponseDto handle409(ConflictDataException e) {
-		return ConflictResponseDto.of(e);
+	public ErrorResponseDto handle409(ConflictDataException e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
 	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-	public UnsupportedMediaTypeResponseDto handle415(HttpMediaTypeNotSupportedException e) {
-		return UnsupportedMediaTypeResponseDto.of(e);
+	public ErrorResponseDto handle415(HttpMediaTypeNotSupportedException e) {
+		String message = e.getMessage();
+		return new ErrorResponseDto(message);
 	}
 
 }
